@@ -26,8 +26,18 @@ NgramModelVocabulary >> allNgramsOfOrder: order [
 ]
 
 { #category : #initialization }
+NgramModelVocabulary >> clear [ 
+	self initializeEmptyVocabulary 
+]
+
+{ #category : #initialization }
 NgramModelVocabulary >> initialize [
 	super initialize.
+	self initializeEmptyVocabulary 
+]
+
+{ #category : #initialization }
+NgramModelVocabulary >> initializeEmptyVocabulary [
 	words := Bag with: self padSymbol with: self unknownSymbol.
 ]
 

@@ -53,6 +53,24 @@ NgramModel >> logarithmBase [
 	^ 2
 ]
 
+{ #category : #probabilities }
+NgramModel >> mostLikelyContinuation: history [
+	| ngramsWithHistory topOne |
+	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
+	topOne := ngramsWithHistory sortedCounts first value.
+	^ topOne last
+]
+
+{ #category : #probabilities }
+NgramModel >> mostLikelyContinuations: history top: aNumber [
+	| ngramsWithHistory lo topOnes |
+	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
+	ngramsWithHistory := ngramsWithHistory sortedCounts.
+	lo := (ngramsWithHistory size - aNumber + 1) max: 1.
+	topOnes := (ngramsWithHistory copyFrom: lo to: ngramsWithHistory size) collect: #value.
+	^ topOnes collect: #last
+]
+
 { #category : #accessing }
 NgramModel >> order [ 
 	^ order
@@ -93,6 +111,7 @@ NgramModel >> trainOn: aString [
 		
 	ngramCounts := ngrams asBag.
 	
+	vocabulary clear.
 	words := aString unigrams flatCollect: #asArray.
 	words do: [ :word | self vocabulary add: word ].
 ]
@@ -110,4 +129,20 @@ NgramModel >> vocabularySize [
 { #category : #testing }
 NgramModel >> wasTrained [
 	^ self vocabulary size > (self vocabulary numberOfReservedTokens)
+]
+
+{ #category : #metrics }
+NgramModel >> withProgressBarCrossEntropyOn: aText [
+	| ngrams ngram entropy |
+	ngrams := aText ngrams: self order pad: self vocabulary padSymbol.
+	
+	entropy := 0.
+	
+	(1 to: ngrams size) do: [ :i |
+		ngram := ngrams at: i.
+		entropy := entropy + ((self probabilityOfNgram: ngram) log: self logarithmBase)
+	] displayingProgress:  [ :each | 'Approximating cross-entropy: ' , (-1 * 1 / each asFloat * entropy) asString ].
+	
+	entropy := -1 * 1 / ngrams size asFloat * entropy.
+	^ entropy
 ]

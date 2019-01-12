@@ -94,7 +94,7 @@ Ngram >> order [
 
 { #category : #converting }
 Ngram >> printOn: aStream [
-	aStream nextPut: $(.
+	aStream nextPutAll: 'n-gram'; nextPut: $(.
 	
 	history ifNotEmpty: [ 
 		history do: [ :each |
