@@ -87,6 +87,19 @@ NgramModelTest >> testLogarithmBase [
 ]
 
 { #category : #tests }
+NgramModelTest >> testPerplexity [
+	| model text entropy perplexity |
+	model := NgramModel order: 2.
+	text := 'Lorem ipsum ipsum ipsum dolor'.
+	model trainOn: text.
+	
+	entropy := -1/6 * ({ 1/6 . 1/6 . 2/6 . 2/6 . 1/6 . 1/6 } collect: [ :x | x log: 2 ]) sum.
+	perplexity := 2 ** entropy.
+	
+	self assert: (model perplexityOn: text) equals: perplexity.
+]
+
+{ #category : #tests }
 NgramModelTest >> testSignalsExceptionWhenCountNgramOfWrongOrder [
 	| model ngram |
 	model := NgramModel order: 2.

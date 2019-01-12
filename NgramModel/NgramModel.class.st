@@ -58,6 +58,11 @@ NgramModel >> order [
 	^ order
 ]
 
+{ #category : #metrics }
+NgramModel >> perplexityOn: aText [
+	^ 2 ** (self crossEntropyOn: aText)
+]
+
 { #category : #probabilities }
 NgramModel >> probabilityOfNgram: ngram [
 	self wasTrained
