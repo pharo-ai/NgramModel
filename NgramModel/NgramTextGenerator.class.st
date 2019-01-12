@@ -11,24 +11,28 @@ Class {
 
 { #category : #initialization }
 NgramTextGenerator >> generateTextOfSize: aNumber [
-	^ ' ' join: ((1 to: aNumber) collect: [ :i | self nextWord ]).
-]
+	| words |
+	words := OrderedCollection new.
+	
+	(1 to: aNumber) do: [ :i | 
+		words add: self nextWord
+	] displayingProgress:  [ :each | 'Generating words: ' , each asString ].
 
-{ #category : #initialization }
-NgramTextGenerator >> initialize [ 
-	super initialize.
-	history := #('<s>') asNgram
+	^ ' ' join: words
 ]
 
 { #category : #initialization }
 NgramTextGenerator >> model: anObject [
-	model := anObject
+	| order |
+	model := anObject.
+	order := model order - 1.
+	history := ((1 to: order) collect: [ :x | '<s>' ]) asNgram.
 ]
 
 { #category : #initialization }
 NgramTextGenerator >> nextWord [
 	| word |
 	word := (model mostLikelyContinuations: history top: 5) atRandom.
-	history := { word } asNgram.
+	history := (history asArray copyWithoutFirst, { word }) asNgram.
 	^ word
 ]

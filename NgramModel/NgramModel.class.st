@@ -97,6 +97,11 @@ NgramModel >> probabilityOfText: aString [
 		inject: 1 into: [ :prod :each | prod * each ].
 ]
 
+{ #category : #enumerating }
+NgramModel >> select: aBlock [
+	^ ngramCounts select: aBlock
+]
+
 { #category : #accessing }
 NgramModel >> totalNgramCount [
 	^ ngramCounts size
