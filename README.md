@@ -3,7 +3,7 @@
 
 #### 1. Loading Brown corpus
 ```Smalltalk
-file := '/Users/oleks/Documents/TextCorpora/brown_corpus.txt' asFileReference.
+file := 'pharo-local/iceberg/olekscode/NgramModel/Corpora/brown.txt' asFileReference.
 brown := file contents.
 ```
 #### 2. Training a 2-gram language model on the corpus
