@@ -20,12 +20,20 @@ NgramModel class >> order: aNumber [
 	^ super new initializeOrder: aNumber
 ]
 
-{ #category : #accessing }
+{ #category : #counts }
 NgramModel >> countOfNgram: ngram [
 	(ngram order = self order)
 		ifFalse: [ NgramOrderError signalExpected: self order received: ngram order ].
 		
 	^ ngramCounts occurrencesOf: ngram
+]
+
+{ #category : #metrics }
+NgramModel >> crossEntropyOn: aText [
+	| ngrams |
+	ngrams := aText ngrams: self order pad: self vocabulary padSymbol.
+	^ -1 * 1 / ngrams size asFloat * (ngrams collect: [ :ngram |
+		(self probabilityOfNgram: ngram) log: self logarithmBase ]) sum.
 ]
 
 { #category : #initialization }
@@ -35,9 +43,14 @@ NgramModel >> initialize [
 	vocabulary := NgramModelVocabulary new.
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 NgramModel >> initializeOrder: aNumber [
 	order := aNumber.
+]
+
+{ #category : #constants }
+NgramModel >> logarithmBase [
+	^ 2
 ]
 
 { #category : #accessing }
@@ -45,7 +58,7 @@ NgramModel >> order [
 	^ order
 ]
 
-{ #category : #accessing }
+{ #category : #probabilities }
 NgramModel >> probabilityOfNgram: ngram [
 	self wasTrained
 		ifFalse: [ NgramEmptyModelError signal ].
@@ -53,7 +66,7 @@ NgramModel >> probabilityOfNgram: ngram [
 	^ (self countOfNgram: ngram) / self totalNgramCount asFloat
 ]
 
-{ #category : #accessing }
+{ #category : #probabilities }
 NgramModel >> probabilityOfText: aString [
 	| ngrams |
 	ngrams := aString ngrams: self order pad: self vocabulary padSymbol.
@@ -66,7 +79,7 @@ NgramModel >> totalNgramCount [
 	^ ngramCounts size
 ]
 
-{ #category : #accessing }
+{ #category : #training }
 NgramModel >> trainOn: aString [
 	| ngrams words |
 	ngrams := aString
@@ -89,7 +102,7 @@ NgramModel >> vocabularySize [
 	^ self vocabulary size
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NgramModel >> wasTrained [
 	^ self vocabulary size > (self vocabulary numberOfReservedTokens)
 ]

@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : #tests }
+NgramModelTest >> testCrossEntropy [
+	| model text entropy |
+	model := NgramModel order: 2.
+	text := 'Lorem ipsum ipsum ipsum dolor'.
+	model trainOn: text.
+	
+	entropy := -1/6 * ({ 1/6 . 1/6 . 2/6 . 2/6 . 1/6 . 1/6 } collect: [ :x | x log: 2 ]) sum.
+	
+	self assert: (model crossEntropyOn: text) equals: entropy.
+]
+
+{ #category : #tests }
 NgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
 	| model ngram |
 	model := NgramModel order: 2.
@@ -65,6 +77,13 @@ NgramModelTest >> testEmptyModelWasNotTrained [
 	| model |
 	model := NgramModel order: 1.
 	self assert: model wasTrained not.
+]
+
+{ #category : #tests }
+NgramModelTest >> testLogarithmBase [
+	| model |
+	model := NgramModel order: 3.
+	self assert: model logarithmBase equals: 2.
 ]
 
 { #category : #tests }
