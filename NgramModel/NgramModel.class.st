@@ -47,6 +47,9 @@ NgramModel >> order [
 
 { #category : #accessing }
 NgramModel >> probabilityOfNgram: ngram [
+	self wasTrained
+		ifFalse: [ NgramEmptyModelError signal ].
+
 	^ (self countOfNgram: ngram) / self totalNgramCount asFloat
 ]
 
@@ -65,12 +68,15 @@ NgramModel >> totalNgramCount [
 
 { #category : #accessing }
 NgramModel >> trainOn: aString [
-	| ngrams |
+	| ngrams words |
 	ngrams := aString
 		ngrams: self order
 		pad: self vocabulary padSymbol.
 		
 	ngramCounts := ngrams asBag.
+	
+	words := aString unigrams flatCollect: #asArray.
+	words do: [ :word | self vocabulary add: word ].
 ]
 
 { #category : #accessing }
@@ -81,4 +87,9 @@ NgramModel >> vocabulary [
 { #category : #accessing }
 NgramModel >> vocabularySize [
 	^ self vocabulary size
+]
+
+{ #category : #accessing }
+NgramModel >> wasTrained [
+	^ self vocabulary size > (self vocabulary numberOfReservedTokens)
 ]

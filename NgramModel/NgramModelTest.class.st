@@ -41,9 +41,37 @@ NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 ]
 
 { #category : #tests }
+NgramModelTest >> testEmptyModelProbabilityOfNgramError [
+	| model |
+	model := NgramModel order: 1.
+	
+	self
+		should: [ model probabilityOfNgram: #(lorem) asNgram ]
+		raise: NgramEmptyModelError
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelProbabilityOfTextError [
+	| model |
+	model := NgramModel order: 1.
+	
+	self
+		should: [ model probabilityOfText: 'Lorem ipsum' ]
+		raise: NgramEmptyModelError
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelWasNotTrained [
+	| model |
+	model := NgramModel order: 1.
+	self assert: model wasTrained not.
+]
+
+{ #category : #tests }
 NgramModelTest >> testSignalsExceptionWhenCountNgramOfWrongOrder [
 	| model ngram |
 	model := NgramModel order: 2.
+	model trainOn: 'Lorem ipsum dolor sit amet'.
 	ngram := #(lorem ipsum dolor) asNgram.
 	
 	self
@@ -55,11 +83,24 @@ NgramModelTest >> testSignalsExceptionWhenCountNgramOfWrongOrder [
 NgramModelTest >> testSignalsExceptionWhenProbabilityNgramOfWrongOrder [
 	| model ngram |
 	model := NgramModel order: 2.
+	model trainOn: 'Lorem ipsum dolor sit amet'.
 	ngram := #(lorem ipsum dolor) asNgram.
 	
 	self
 		should: [ model probabilityOfNgram: ngram ]
 		raise: NgramOrderError
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
+	| model ngrams probabilities |
+	model := NgramModel order: 2.
+	model trainOn: 'Lorem ipsum dolor sit amet'.
+	
+	ngrams := model vocabulary allNgramsOfOrder: 2.
+	probabilities := ngrams asArray collect: [ :ngram | model probabilityOfNgram: ngram ].
+	
+	self assert: probabilities sum closeTo: 1.
 ]
 
 { #category : #tests }
@@ -115,4 +156,37 @@ NgramModelTest >> testTrainedModelProbabilityOfText [
 	self
 		assert: (model probabilityOfText: text)
 		closeTo: (1/6) ** 4 * ((2/6) ** 2) asFloat.
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedModelVocabulary [
+	| model text words |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	words := #('<s>' '<unk>' lorem ipsum dolor) asSet.
+	
+	model trainOn: text.
+
+	self assert: model vocabulary words equals: words.
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedModelWasTrained [
+	| model |
+	model := NgramModel order: 1.
+	model trainOn: 'Lorem ipsum dolor sit amet'.
+	self assert: model wasTrained.
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedUnigramModelIsProbabilityDistribution [
+	| model ngrams probabilities |
+	model := NgramModel order: 1.
+	model trainOn: 'Lorem ipsum dolor sit amet'.
+	
+	ngrams := model vocabulary allNgramsOfOrder: 1.
+	probabilities := ngrams asArray collect: [ :ngram | model probabilityOfNgram: ngram ].
+	
+	self assert: probabilities sum closeTo: 1.
 ]
