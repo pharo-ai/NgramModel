@@ -1,0 +1,118 @@
+Class {
+	#name : #NgramModelTest,
+	#superclass : #TestCase,
+	#category : #NgramModel
+}
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
+	| model ngram |
+	model := NgramModel order: 2.
+	ngram := #(lorem ipsum) asNgram.
+	self assert: (model countOfNgram: ngram) equals: 0.
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelHasNonEmptyVocabulary [
+	| model |
+	model := NgramModel order: 2.
+	self assert: model vocabulary isEmpty not.
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelHasTotalNgramCount0 [
+	| model |
+	model := NgramModel order: 2.
+	self assert: model totalNgramCount equals: 0.
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelHasVocabularyOfSize2 [
+	| model |
+	model := NgramModel order: 2.
+	self assert: model vocabulary size equals: 2.
+]
+
+{ #category : #tests }
+NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
+	| model |
+	model := NgramModel order: 2.
+	self assert: model order equals: 2.
+]
+
+{ #category : #tests }
+NgramModelTest >> testSignalsExceptionWhenCountNgramOfWrongOrder [
+	| model ngram |
+	model := NgramModel order: 2.
+	ngram := #(lorem ipsum dolor) asNgram.
+	
+	self
+		should: [ model countOfNgram: ngram ]
+		raise: NgramOrderError
+]
+
+{ #category : #tests }
+NgramModelTest >> testSignalsExceptionWhenProbabilityNgramOfWrongOrder [
+	| model ngram |
+	model := NgramModel order: 2.
+	ngram := #(lorem ipsum dolor) asNgram.
+	
+	self
+		should: [ model probabilityOfNgram: ngram ]
+		raise: NgramOrderError
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedModelCounts [
+	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	ngram1 := #('<s>' lorem) asNgram.
+	ngram2 := #(lorem ipsum) asNgram.
+	ngram3 := #(ipsum ipsum) asNgram.
+	ngram4 := #(ipsum dolor) asNgram.
+	ngram5 := #(dolor '<s>') asNgram.
+	
+	model trainOn: text.
+	
+	self assert: (model countOfNgram: ngram1) equals: 1.
+	self assert: (model countOfNgram: ngram2) equals: 1.
+	self assert: (model countOfNgram: ngram3) equals: 2.
+	self assert: (model countOfNgram: ngram4) equals: 1.
+	self assert: (model countOfNgram: ngram5) equals: 1.
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
+	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	ngram1 := #('<s>' lorem) asNgram.
+	ngram2 := #(lorem ipsum) asNgram.
+	ngram3 := #(ipsum ipsum) asNgram.
+	ngram4 := #(ipsum dolor) asNgram.
+	ngram5 := #(dolor '<s>') asNgram.
+	
+	model trainOn: text.
+	
+	self assert: (model probabilityOfNgram: ngram1) equals: (1 / 6 asFloat).
+	self assert: (model probabilityOfNgram: ngram2) equals: (1 / 6 asFloat).
+	self assert: (model probabilityOfNgram: ngram3) equals: (2 / 6 asFloat).
+	self assert: (model probabilityOfNgram: ngram4) equals: (1 / 6 asFloat).
+	self assert: (model probabilityOfNgram: ngram5) equals: (1 / 6 asFloat).
+]
+
+{ #category : #tests }
+NgramModelTest >> testTrainedModelProbabilityOfText [
+	| model text |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	
+	model trainOn: text.
+	self
+		assert: (model probabilityOfText: text)
+		closeTo: (1/6) ** 4 * ((2/6) ** 2) asFloat.
+]
