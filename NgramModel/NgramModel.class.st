@@ -19,16 +19,16 @@ NgramModel class >> new [
 
 { #category : #accessing }
 NgramModel class >> order: aNumber [
-	^ super new initializeOrder: aNumber
+	| defaultSmoothingTechnique |
+	defaultSmoothingTechnique := NgramModelNoSmoothing new.
+	^ self order: aNumber withSmoothing: defaultSmoothingTechnique
 ]
 
 { #category : #accessing }
-NgramModel class >> order: aNumber withSmoothing: aSmoothingClass [
-	| model smoothing |
-	model := self order: aNumber.
-	smoothing := aSmoothingClass forModel: model.
-	model smoothingTechnique: smoothing.
-	^ model
+NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
+	^ super new
+		initializeOrder: aNumber andSmoothing: aSmoothingTechnique;
+		yourself.
 ]
 
 { #category : #counts }
@@ -58,15 +58,16 @@ NgramModel >> crossEntropyOn: aText [
 { #category : #initialization }
 NgramModel >> initialize [ 
 	super initialize.
-	smoothingTechnique := NgramModelNoSmoothing forModel: self.
 	ngramCounts := Bag new.
 	historyCounts := Bag new.
 	vocabulary := NgramModelVocabulary new.
 ]
 
 { #category : #initialization }
-NgramModel >> initializeOrder: aNumber [
+NgramModel >> initializeOrder: aNumber andSmoothing: aSmoothingTechnique [
 	order := aNumber.
+	smoothingTechnique := aSmoothingTechnique.
+	smoothingTechnique model: self
 ]
 
 { #category : #constants }
@@ -127,11 +128,6 @@ NgramModel >> probabilityOfText: aString [
 { #category : #accessing }
 NgramModel >> smoothingTechnique [
 	^ smoothingTechnique 
-]
-
-{ #category : #accessing }
-NgramModel >> smoothingTechnique: aSmoothingTechnique [
-	smoothingTechnique := aSmoothingTechnique 
 ]
 
 { #category : #accessing }

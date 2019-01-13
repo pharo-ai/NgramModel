@@ -8,16 +8,6 @@ Class {
 	#category : #NgramModel
 }
 
-{ #category : #'as yet unclassified' }
-NgramModelSmoothing class >> forModel: aModel [
-	^ super new model: aModel; yourself
-]
-
-{ #category : #'as yet unclassified' }
-NgramModelSmoothing class >> new [ 
-	self shouldNotImplement 
-]
-
 { #category : #accessing }
 NgramModelSmoothing >> model [ 
 	^ model
