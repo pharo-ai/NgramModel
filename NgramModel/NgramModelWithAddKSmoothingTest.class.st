@@ -11,7 +11,7 @@ Class {
 { #category : #tests }
 NgramModelWithAddKSmoothingTest >> setUp [ 
 	k := 2.
-	smoothing := NgramModelAddKSmoothing withK: k.
+	smoothing := NgramAddKSmoothing withK: k.
 ]
 
 { #category : #tests }

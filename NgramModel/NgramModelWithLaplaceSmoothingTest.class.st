@@ -9,7 +9,7 @@ Class {
 
 { #category : #tests }
 NgramModelWithLaplaceSmoothingTest >> setUp [ 
-	smoothing := NgramModelLaplaceSmoothing new.
+	smoothing := NgramLaplaceSmoothing new.
 ]
 
 { #category : #tests }

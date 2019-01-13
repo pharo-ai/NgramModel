@@ -20,7 +20,7 @@ NgramModel class >> new [
 { #category : #accessing }
 NgramModel class >> order: aNumber [
 	| defaultSmoothingTechnique |
-	defaultSmoothingTechnique := NgramModelNoSmoothing new.
+	defaultSmoothingTechnique := NgramNoSmoothing new.
 	^ self order: aNumber withSmoothing: defaultSmoothingTechnique
 ]
 
@@ -33,18 +33,23 @@ NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
 
 { #category : #counts }
 NgramModel >> countOfHistory: ngram [
-	(ngram order = (self order - 1))
-		ifFalse: [ NgramOrderError signalExpected: self order - 1 received: ngram order ].
-		
 	^ historyCounts occurrencesOf: ngram
 ]
 
 { #category : #counts }
 NgramModel >> countOfNgram: ngram [
-	(ngram order = self order)
-		ifFalse: [ NgramOrderError signalExpected: self order received: ngram order ].
-		
 	^ ngramCounts occurrencesOf: ngram
+]
+
+{ #category : #counts }
+NgramModel >> countOfUniqueNgramsEndingWith: aWord [
+	^ (ngramCounts asSet select: [ :ngram | ngram last = aWord ]) size
+]
+
+{ #category : #counts }
+NgramModel >> countOfUniqueNgramsWithHistory: ngram [
+	^ (ngramCounts asSet
+		select: [ :eachNgram | eachNgram history = ngram ]) size.
 ]
 
 { #category : #metrics }
@@ -53,6 +58,11 @@ NgramModel >> crossEntropyOn: aText [
 	ngrams := aText ngrams: self order pad: self vocabulary padSymbol.
 	^ -1 * 1 / ngrams size asFloat * (ngrams collect: [ :ngram |
 		(self probabilityOfNgram: ngram) log: self logarithmBase ]) sum.
+]
+
+{ #category : #accessing }
+NgramModel >> historyCounts [
+	^ historyCounts
 ]
 
 { #category : #initialization }
@@ -93,11 +103,6 @@ NgramModel >> mostLikelyContinuations: history top: aNumber [
 	^ topOnes collect: #last
 ]
 
-{ #category : #enumerating }
-NgramModel >> ngramsWithCountsDo: aTwoArgBlock [ 
-	ngramCounts doWithOccurrences: aTwoArgBlock 
-]
-
 { #category : #accessing }
 NgramModel >> order [ 
 	^ order
@@ -111,9 +116,6 @@ NgramModel >> perplexityOn: aText [
 { #category : #probabilities }
 NgramModel >> probabilityOfNgram: ngram [
 	"Probability of n-gram is a conditional probability of its last word w given the history h (n-gram of order n-1): P(w|h)"
-	self wasTrained
-		ifFalse: [ NgramEmptyModelError signal ].
-
 	^ self smoothingTechnique smoothedProbabilityOfNgram: ngram
 ]
 

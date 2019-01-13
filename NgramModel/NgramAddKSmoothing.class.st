@@ -1,6 +1,6 @@
 Class {
-	#name : #NgramModelAddKSmoothing,
-	#superclass : #NgramModelSmoothing,
+	#name : #NgramAddKSmoothing,
+	#superclass : #NgramSmoothing,
 	#type : #variable,
 	#instVars : [
 		'k'
@@ -9,27 +9,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-NgramModelAddKSmoothing class >> new [ 	
-	self shouldNotImplement 
-]
-
-{ #category : #'as yet unclassified' }
-NgramModelAddKSmoothing class >> withK: aNumber [
+NgramAddKSmoothing class >> withK: aNumber [
 	^ super new k: aNumber; yourself
 ]
 
 { #category : #'as yet unclassified' }
-NgramModelAddKSmoothing >> k [
+NgramAddKSmoothing >> k [
 	^ k
 ]
 
 { #category : #'as yet unclassified' }
-NgramModelAddKSmoothing >> k: aNumber [
+NgramAddKSmoothing >> k: aNumber [
 	k := aNumber
 ]
 
 { #category : #'as yet unclassified' }
-NgramModelAddKSmoothing >> smoothedProbabilityOfNgram: ngram [
+NgramAddKSmoothing >> smoothedProbabilityOfNgram: ngram [
 	| ngramCount historyCount |
 	ngramCount := self model countOfNgram: ngram.
 	

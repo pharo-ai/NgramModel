@@ -53,26 +53,6 @@ NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelProbabilityOfNgramError [
-	| model |
-	model := NgramModel order: 1.
-	
-	self
-		should: [ model probabilityOfNgram: #(lorem) asNgram ]
-		raise: NgramEmptyModelError
-]
-
-{ #category : #tests }
-NgramModelTest >> testEmptyModelProbabilityOfTextError [
-	| model |
-	model := NgramModel order: 1.
-	
-	self
-		should: [ model probabilityOfText: 'Lorem ipsum' ]
-		raise: NgramEmptyModelError
-]
-
-{ #category : #tests }
 NgramModelTest >> testEmptyModelWasNotTrained [
 	| model |
 	model := NgramModel order: 1.
@@ -97,30 +77,6 @@ NgramModelTest >> testPerplexity [
 	perplexity := 2 ** entropy.
 	
 	self assert: (model perplexityOn: text) closeTo: perplexity.
-]
-
-{ #category : #tests }
-NgramModelTest >> testSignalsExceptionWhenCountNgramOfWrongOrder [
-	| model ngram |
-	model := NgramModel order: 2.
-	model trainOn: 'Lorem ipsum dolor sit amet'.
-	ngram := #(lorem ipsum dolor) asNgram.
-	
-	self
-		should: [ model countOfNgram: ngram ]
-		raise: NgramOrderError
-]
-
-{ #category : #tests }
-NgramModelTest >> testSignalsExceptionWhenProbabilityNgramOfWrongOrder [
-	| model ngram |
-	model := NgramModel order: 2.
-	model trainOn: 'Lorem ipsum dolor sit amet'.
-	ngram := #(lorem ipsum dolor) asNgram.
-	
-	self
-		should: [ model probabilityOfNgram: ngram ]
-		raise: NgramOrderError
 ]
 
 { #category : #tests }

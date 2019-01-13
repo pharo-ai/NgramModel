@@ -1,5 +1,5 @@
 Class {
-	#name : #NgramModelSmoothing,
+	#name : #NgramSmoothing,
 	#superclass : #Object,
 	#type : #variable,
 	#instVars : [
@@ -9,21 +9,21 @@ Class {
 }
 
 { #category : #accessing }
-NgramModelSmoothing >> model [ 
+NgramSmoothing >> model [ 
 	^ model
 ]
 
 { #category : #accessing }
-NgramModelSmoothing >> model: aModel [
+NgramSmoothing >> model: aModel [
 	model := aModel
 ]
 
 { #category : #'as yet unclassified' }
-NgramModelSmoothing >> postTraining [
+NgramSmoothing >> postTraining [
 	"Do nothing"
 ]
 
 { #category : #'as yet unclassified' }
-NgramModelSmoothing >> smoothedProbabilityOfNgram: ngram [
+NgramSmoothing >> smoothedProbabilityOfNgram: ngram [
 	self subclassResponsibility 
 ]
