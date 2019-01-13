@@ -21,6 +21,14 @@ NgramTest >> testBigramHasOrder2 [
 ]
 
 { #category : #tests }
+NgramTest >> testEmptyNgramFromArray [
+	| ngram |
+	ngram := Ngram fromArray: #().
+	
+	self assert: ngram order equals: 0.
+]
+
+{ #category : #tests }
 NgramTest >> testEmptyNgramHasOrder0 [
 	| ngram |
 	ngram := Ngram new. 

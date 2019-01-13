@@ -13,6 +13,9 @@ Class {
 Ngram class >> fromArray: anArray [
 	| ngram |
 	ngram := self new.
+	
+	anArray ifEmpty: [ ^ngram ].
+	
 	ngram history: (anArray copyFrom: 1 to: (anArray size - 1)).
 	ngram last: anArray last.
 	^ ngram

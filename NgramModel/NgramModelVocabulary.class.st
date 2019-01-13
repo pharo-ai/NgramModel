@@ -13,18 +13,6 @@ NgramModelVocabulary >> add: anObject [
 	words add: anObject
 ]
 
-{ #category : #'as yet unclassified' }
-NgramModelVocabulary >> allNgramsOfOrder: order [
-	| ngrams |
-	ngrams := (self recursiveNgramWithHistory: Array new maxOrder: order)
-		flatCollect: #value.
-		
-	ngrams := ngrams asSet.
-	ngrams remove: ((1 to: order) collect: [ :x | '<s>' ]) asNgram.
-	
-	^ ngrams
-]
-
 { #category : #initialization }
 NgramModelVocabulary >> clear [ 
 	self initializeEmptyVocabulary 
@@ -38,7 +26,7 @@ NgramModelVocabulary >> initialize [
 
 { #category : #initialization }
 NgramModelVocabulary >> initializeEmptyVocabulary [
-	words := Bag with: self padSymbol with: self unknownSymbol.
+	words := Bag new.
 ]
 
 { #category : #accessing }
@@ -48,7 +36,7 @@ NgramModelVocabulary >> isEmpty [
 
 { #category : #initialization }
 NgramModelVocabulary >> numberOfReservedTokens [
-	^ 2
+	^ 1
 ]
 
 { #category : #accessing }
@@ -68,11 +56,6 @@ NgramModelVocabulary >> recursiveNgramWithHistory: history maxOrder: order [
 { #category : #accessing }
 NgramModelVocabulary >> size [
 	^ self words size
-]
-
-{ #category : #accessing }
-NgramModelVocabulary >> unknownSymbol [
-	^ '<unk>'
 ]
 
 { #category : #initialization }

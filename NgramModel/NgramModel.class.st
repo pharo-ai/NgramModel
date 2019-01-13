@@ -4,7 +4,9 @@ Class {
 	#type : #variable,
 	#instVars : [
 		'order',
+		'smoothingTechnique',
 		'ngramCounts',
+		'historyCounts',
 		'vocabulary'
 	],
 	#category : #NgramModel
@@ -18,6 +20,23 @@ NgramModel class >> new [
 { #category : #accessing }
 NgramModel class >> order: aNumber [
 	^ super new initializeOrder: aNumber
+]
+
+{ #category : #accessing }
+NgramModel class >> order: aNumber withSmoothing: aSmoothingClass [
+	| model smoothing |
+	model := self order: aNumber.
+	smoothing := aSmoothingClass forModel: model.
+	model smoothingTechnique: smoothing.
+	^ model
+]
+
+{ #category : #counts }
+NgramModel >> countOfHistory: ngram [
+	(ngram order = (self order - 1))
+		ifFalse: [ NgramOrderError signalExpected: self order - 1 received: ngram order ].
+		
+	^ historyCounts occurrencesOf: ngram
 ]
 
 { #category : #counts }
@@ -39,7 +58,9 @@ NgramModel >> crossEntropyOn: aText [
 { #category : #initialization }
 NgramModel >> initialize [ 
 	super initialize.
+	smoothingTechnique := NgramModelNoSmoothing forModel: self.
 	ngramCounts := Bag new.
+	historyCounts := Bag new.
 	vocabulary := NgramModelVocabulary new.
 ]
 
@@ -71,6 +92,11 @@ NgramModel >> mostLikelyContinuations: history top: aNumber [
 	^ topOnes collect: #last
 ]
 
+{ #category : #enumerating }
+NgramModel >> ngramsWithCountsDo: aTwoArgBlock [ 
+	ngramCounts doWithOccurrences: aTwoArgBlock 
+]
+
 { #category : #accessing }
 NgramModel >> order [ 
 	^ order
@@ -83,10 +109,11 @@ NgramModel >> perplexityOn: aText [
 
 { #category : #probabilities }
 NgramModel >> probabilityOfNgram: ngram [
+	"Probability of n-gram is a conditional probability of its last word w given the history h (n-gram of order n-1): P(w|h)"
 	self wasTrained
 		ifFalse: [ NgramEmptyModelError signal ].
 
-	^ (self countOfNgram: ngram) / self totalNgramCount asFloat
+	^ self smoothingTechnique smoothedProbabilityOfNgram: ngram
 ]
 
 { #category : #probabilities }
@@ -97,13 +124,18 @@ NgramModel >> probabilityOfText: aString [
 		inject: 1 into: [ :prod :each | prod * each ].
 ]
 
-{ #category : #enumerating }
-NgramModel >> select: aBlock [
-	^ ngramCounts select: aBlock
+{ #category : #accessing }
+NgramModel >> smoothingTechnique [
+	^ smoothingTechnique 
 ]
 
 { #category : #accessing }
-NgramModel >> totalNgramCount [
+NgramModel >> smoothingTechnique: aSmoothingTechnique [
+	smoothingTechnique := aSmoothingTechnique 
+]
+
+{ #category : #accessing }
+NgramModel >> totalNgramCountInText [
 	^ ngramCounts size
 ]
 
@@ -115,10 +147,15 @@ NgramModel >> trainOn: aString [
 		pad: self vocabulary padSymbol.
 		
 	ngramCounts := ngrams asBag.
+	ngramCounts doWithOccurrences: [ :ngram :count |
+		historyCounts add: ngram history withOccurrences: count ].
 	
 	vocabulary clear.
+	vocabulary add: vocabulary padSymbol.
 	words := aString unigrams flatCollect: #asArray.
 	words do: [ :word | self vocabulary add: word ].
+	
+	self smoothingTechnique postTraining
 ]
 
 { #category : #accessing }
