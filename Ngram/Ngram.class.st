@@ -25,46 +25,6 @@ Ngram class >> new [
 ]
 
 { #category : #'instance creation' }
-Ngram class >> with: anObject [
-	"Creates a unigram"
-	^ self
-		withHistory: self zerogram
-		last: anObject.
-]
-
-{ #category : #'as yet unclassified' }
-Ngram class >> with: firstObject with: secondObject [
-	"Creates a bigram"
-	^ self
-		withHistory: (self with: firstObject)
-		last: secondObject.
-]
-
-{ #category : #'as yet unclassified' }
-Ngram class >> with: firstObject with: secondObject with: thirdObject [
-	"Creates a trigram"
-	^ self
-		withHistory: (self with: firstObject with: secondObject)
-		last: thirdObject.
-]
-
-{ #category : #'as yet unclassified' }
-Ngram class >> with: firstObject with: secondObject with: thirdObject with: fourthObject [
-	"Creates a tetragram"
-	^ self
-		withHistory: (self with: firstObject with: secondObject with: thirdObject)
-		last: fourthObject.
-]
-
-{ #category : #'as yet unclassified' }
-Ngram class >> with: firstObject with: secondObject with: thirdObject with: fourthObject with: fifthObject [
-	"Creates a pentagram"
-	^ self
-		withHistory: (self with: firstObject with: secondObject with: thirdObject with: fourthObject)
-		last: fifthObject.
-]
-
-{ #category : #'instance creation' }
 Ngram class >> withHistory: aNgram last: anObject [
 	"Creates n-gram with aNgram as history and anObject as last element"
 	^ super new
