@@ -11,39 +11,72 @@ Class {
 
 { #category : #'instance creation' }
 Ngram class >> fromArray: anArray [
-	| ngram |
-	ngram := self new.
-	
-	anArray ifEmpty: [ ^ngram ].
-	
-	ngram history: (anArray copyFrom: 1 to: (anArray size - 1)).
-	ngram last: anArray last.
-	^ ngram
+	"Creates n-gram from an array of n elements"
+	anArray isEmpty ifTrue: [ ^ self zerogram ].
+	^ self
+		withHistory: (self fromArray: (anArray copyWithoutIndex: anArray size))
+		last: anArray last.
+]
+
+{ #category : #'instance creation' }
+Ngram class >> new [ 
+	"Either use zerogram to create an empty n-gram or provide values"
+	self shouldNotImplement
 ]
 
 { #category : #'instance creation' }
 Ngram class >> with: anObject [
-	^ self new last: anObject; yourself.
+	"Creates a unigram"
+	^ self
+		withHistory: self zerogram
+		last: anObject.
 ]
 
 { #category : #'as yet unclassified' }
 Ngram class >> with: firstObject with: secondObject [
-	^ self new history: { firstObject }; last: secondObject; yourself.
+	"Creates a bigram"
+	^ self
+		withHistory: (self with: firstObject)
+		last: secondObject.
 ]
 
 { #category : #'as yet unclassified' }
 Ngram class >> with: firstObject with: secondObject with: thirdObject [
-	^ self new history: { firstObject . secondObject }; last: thirdObject; yourself.
+	"Creates a trigram"
+	^ self
+		withHistory: (self with: firstObject with: secondObject)
+		last: thirdObject.
 ]
 
 { #category : #'as yet unclassified' }
 Ngram class >> with: firstObject with: secondObject with: thirdObject with: fourthObject [
-	^ self new history: { firstObject . secondObject . thirdObject }; last: fourthObject; yourself.
+	"Creates a tetragram"
+	^ self
+		withHistory: (self with: firstObject with: secondObject with: thirdObject)
+		last: fourthObject.
 ]
 
 { #category : #'as yet unclassified' }
 Ngram class >> with: firstObject with: secondObject with: thirdObject with: fourthObject with: fifthObject [
-	^ self new history: { firstObject . secondObject . thirdObject . fourthObject }; last: fifthObject; yourself.
+	"Creates a pentagram"
+	^ self
+		withHistory: (self with: firstObject with: secondObject with: thirdObject with: fourthObject)
+		last: fifthObject.
+]
+
+{ #category : #'instance creation' }
+Ngram class >> withHistory: aNgram last: anObject [
+	"Creates n-gram with aNgram as history and anObject as last element"
+	^ super new
+		history: aNgram;
+		last: anObject;
+		yourself.
+]
+
+{ #category : #'instance creation' }
+Ngram class >> zerogram [
+	"Creates n-gram of order 0. It is an empty n-gram that has no elements"
+	^ super new.
 ]
 
 { #category : #comparing }
@@ -56,7 +89,8 @@ Ngram >> = anObject [
 
 { #category : #converting }
 Ngram >> asArray [ 
-	^ history copyWith: last
+	self isEmpty ifTrue: [ ^ #() ].
+	^ history asArray copyWith: last
 ]
 
 { #category : #comparing }
@@ -65,18 +99,19 @@ Ngram >> hash [
 ]
 
 { #category : #accessing }
-Ngram >> history [ 
-	^ history asNgram
+Ngram >> history [
+	self isEmpty ifTrue: [ ^ self class zerogram ].
+	^ history
 ]
 
 { #category : #accessing }
-Ngram >> history: aCollection [ 
-	history := aCollection asArray
+Ngram >> history: aNgram [ 
+	history := aNgram
 ]
 
-{ #category : #initialization }
-Ngram >> initialize [ 
-	history := Array new.
+{ #category : #accessing }
+Ngram >> isEmpty [ 
+	^ self last isNil
 ]
 
 { #category : #accessing }
@@ -91,19 +126,15 @@ Ngram >> last: anObject [
 
 { #category : #accessing }
 Ngram >> order [ 
-	last ifNil: [ ^ 0 ].
-	^ history size + 1
+	self isEmpty ifTrue: [ ^ 0 ].
+	^ history order + 1
 ]
 
 { #category : #converting }
 Ngram >> printOn: aStream [
-	aStream nextPutAll: 'n-gram'; nextPut: $(.
-	
-	history ifNotEmpty: [ 
-		history do: [ :each |
-			each printOn: aStream.
-			aStream space ] ].
-	
-	last printOn: aStream.
-	aStream nextPut: $).
+	aStream
+		nextPutAll: 'n-gram';
+		nextPut: $(;
+		nextPutAll: (' ' join: self asArray);
+		nextPut: $).
 ]

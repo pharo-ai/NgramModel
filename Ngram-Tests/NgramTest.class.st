@@ -21,22 +21,6 @@ NgramTest >> testBigramHasOrder2 [
 ]
 
 { #category : #tests }
-NgramTest >> testEmptyNgramFromArray [
-	| ngram |
-	ngram := Ngram fromArray: #().
-	
-	self assert: ngram order equals: 0.
-]
-
-{ #category : #tests }
-NgramTest >> testEmptyNgramHasOrder0 [
-	| ngram |
-	ngram := Ngram new. 
-	
-	self assert: ngram order equals: 0.
-]
-
-{ #category : #tests }
 NgramTest >> testEquality [
 	| firstNgram secondNgram |
 	firstNgram := Ngram with: 'lorem' with: 'ipsum' with: 'dolor'.
@@ -120,4 +104,19 @@ NgramTest >> testUnigramHasOrder1 [
 	ngram := Ngram with: 'lorem'. 
 	
 	self assert: ngram order equals: 1.
+]
+
+{ #category : #tests }
+NgramTest >> testZerogramFromArray [
+	| ngram |
+	ngram := Ngram fromArray: #().
+	
+	self assert: ngram order equals: 0.
+]
+
+{ #category : #tests }
+NgramTest >> testZerogramHasOrder0 [
+	| ngram |
+	ngram := Ngram zerogram. 
+	self assert: ngram order equals: 0.
 ]
