@@ -1,6 +1,6 @@
 Extension { #name : #Array }
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 Array >> asNgram [
 	^ Ngram fromArray: self
 ]

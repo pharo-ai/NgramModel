@@ -6,7 +6,7 @@ Class {
 		'history',
 		'last'
 	],
-	#category : #NgramModel
+	#category : #Ngram
 }
 
 { #category : #'instance creation' }

@@ -1,28 +1,26 @@
 Class {
-	#name : #NgramModelWithAddKSmoothingTest,
+	#name : #NgramModelWithLaplaceSmoothingTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'smoothing',
-		'k'
+		'smoothing'
 	],
-	#category : #NgramModel
+	#category : #'NgramModel-Tests'
 }
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> setUp [ 
-	k := 2.
-	smoothing := NgramAddKSmoothing withK: k.
+NgramModelWithLaplaceSmoothingTest >> setUp [ 
+	smoothing := NgramLaplaceSmoothing new.
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testCanBeInitialized [
+NgramModelWithLaplaceSmoothingTest >> testCanBeInitialized [
 	| model |
 	model := NgramModel order: 2 withSmoothing: smoothing.
 	self assert: smoothing model equals: model
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testTrainedBigramModelIsProbabilityDistribution [
+NgramModelWithLaplaceSmoothingTest >> testTrainedBigramModelIsProbabilityDistribution [
 	| text vocab model ngram sumOfProbabilities |
 	text := 'Lorem ipsum dolor sit amet'.
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
@@ -39,7 +37,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedBigramModelIsProbabilityDistributi
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testTrainedModelCounts [
+NgramModelWithLaplaceSmoothingTest >> testTrainedModelCounts [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
 	model := NgramModel order: 2 withSmoothing: smoothing.
 	
@@ -60,7 +58,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedModelCounts [
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testTrainedModelProbabilitiesOfNgrams [
+NgramModelWithLaplaceSmoothingTest >> testTrainedModelProbabilitiesOfNgrams [
 	| model text vocab ngram1 ngram2 ngram3 ngram4 ngram5 |
 	model := NgramModel order: 2 withSmoothing: smoothing.
 	
@@ -75,32 +73,28 @@ NgramModelWithAddKSmoothingTest >> testTrainedModelProbabilitiesOfNgrams [
 	
 	model trainOn: text.
 	
-	self assert: (model probabilityOfNgram: ngram1) equals: (1 + k) / (1 + (k * vocab size)) asFloat.
-	self assert: (model probabilityOfNgram: ngram2) equals: (1 + k) / (1 + (k * vocab size)) asFloat.
-	self assert: (model probabilityOfNgram: ngram3) equals: (2 + k) / (3 + (k * vocab size)) asFloat.
-	self assert: (model probabilityOfNgram: ngram4) equals: (1 + k) / (3 + (k * vocab size)) asFloat.
-	self assert: (model probabilityOfNgram: ngram5) equals: (1 + k) / (1 + (k * vocab size)) asFloat.
+	self assert: (model probabilityOfNgram: ngram1) equals: (1 + 1) / (1 + vocab size) asFloat.
+	self assert: (model probabilityOfNgram: ngram2) equals: (1 + 1) / (1 + vocab size) asFloat.
+	self assert: (model probabilityOfNgram: ngram3) equals: (2 + 1) / (3 + vocab size) asFloat.
+	self assert: (model probabilityOfNgram: ngram4) equals: (1 + 1) / (3 + vocab size) asFloat.
+	self assert: (model probabilityOfNgram: ngram5) equals: (1 + 1) / (1 + vocab size) asFloat.
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testTrainedModelSelfProbabilityOfText [
-	| model text x1 x2 x3 |
+NgramModelWithLaplaceSmoothingTest >> testTrainedModelSelfProbabilityOfText [
+	| model text |
 	model := NgramModel order: 2 withSmoothing: smoothing.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	
-	x1 := (1 + k) / (1 + (k * 4)) asFloat.
-	x2 := (2 + k) / (3 + (k * 4)) asFloat.
-	x3 := (1 + k) / (3 + (k * 4)) asFloat.
-	
 	model trainOn: text.
 	self
 		assert: (model probabilityOfText: text)
-		closeTo: x1 ** 3 * (x2 ** 2) * x3 asFloat.
+		closeTo: (2/5) ** 3 * ((3/7) ** 2) * 2/7 asFloat.
 ]
 
 { #category : #tests }
-NgramModelWithAddKSmoothingTest >> testTrainedUnigramModelIsProbabilityDistribution [
+NgramModelWithLaplaceSmoothingTest >> testTrainedUnigramModelIsProbabilityDistribution [
 	| text vocab model ngram sumOfProbabilities |
 	text := 'Lorem ipsum dolor sit amet'.
 	vocab := #('<s>' Lorem ipsum dolor sit amet).

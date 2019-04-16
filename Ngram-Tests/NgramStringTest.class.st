@@ -1,7 +1,7 @@
 Class {
 	#name : #NgramStringTest,
 	#superclass : #TestCase,
-	#category : #NgramModel
+	#category : #'Ngram-Tests'
 }
 
 { #category : #tests }

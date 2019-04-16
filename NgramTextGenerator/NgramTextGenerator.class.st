@@ -6,7 +6,7 @@ Class {
 		'model',
 		'history'
 	],
-	#category : #NgramModel
+	#category : #NgramTextGenerator
 }
 
 { #category : #initialization }

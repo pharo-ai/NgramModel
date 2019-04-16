@@ -5,7 +5,7 @@ Class {
 		'vocabulary',
 		'words'
 	],
-	#category : #NgramModel
+	#category : #'NgramModel-Tests'
 }
 
 { #category : #running }

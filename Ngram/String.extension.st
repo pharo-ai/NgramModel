@@ -1,21 +1,21 @@
 Extension { #name : #String }
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> bigrams [
 	^ self ngrams: 2.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> bigramsPad: padSymbol [
 	^ self ngrams: 2 pad: padSymbol
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> ngrams: order [
 	^ self ngramsNoPad: order.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> ngrams: order pad: padSymbol [
 	| tokens |
 	tokens := self findTokens: ' '.
@@ -23,7 +23,7 @@ String >> ngrams: order pad: padSymbol [
 	^ self tokens: tokens toNgrams: order
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> ngramsNoPad: order [
 	| tokens |
 	tokens := self findTokens: ' '.
@@ -31,55 +31,55 @@ String >> ngramsNoPad: order [
 	^ self tokens: tokens toNgrams: order
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> padTokens: tokens with: padSymbol order: order [
 	(order - 1) timesRepeat: [
 		tokens addFirst: padSymbol.
 		tokens addLast: padSymbol ]
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> pentagrams [
 	^ self ngrams: 5.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> pentagramsPad: padSymbol [
 	^ self ngrams: 5 pad: padSymbol
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> tetragrams [
 	^ self ngrams: 4.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> tetragramsPad: padSymbol [
 	^ self ngrams: 4 pad: padSymbol
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> tokens: tokens toNgrams: order [
 	^ (1 to: tokens size - order + 1) collect: [ :i |
 		(tokens copyFrom: i to: i + order - 1) asArray asNgram ]
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> trigrams [
 	^ self ngrams: 3.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> trigramsPad: padSymbol [
 	^ self ngrams: 3 pad: padSymbol
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> unigrams [
 	^ self ngrams: 1.
 ]
 
-{ #category : #'*NgramModel' }
+{ #category : #'*Ngram' }
 String >> unigramsPad: padSymbol [
 	^ self ngrams: 1 pad: padSymbol
 ]
