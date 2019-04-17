@@ -52,14 +52,6 @@ NgramModel >> countOfUniqueNgramsWithHistory: ngram [
 		select: [ :eachNgram | eachNgram history = ngram ]) size.
 ]
 
-{ #category : #metrics }
-NgramModel >> crossEntropyOn: aText [
-	| ngrams |
-	ngrams := aText ngrams: self order padWith: self vocabulary padSymbol.
-	^ -1 * 1 / ngrams size asFloat * (ngrams collect: [ :ngram |
-		(self probabilityOfNgram: ngram) log: self logarithmBase ]) sum.
-]
-
 { #category : #accessing }
 NgramModel >> historyCounts [
 	^ historyCounts
@@ -78,11 +70,6 @@ NgramModel >> initializeOrder: aNumber andSmoothing: aSmoothingTechnique [
 	order := aNumber.
 	smoothingTechnique := aSmoothingTechnique.
 	smoothingTechnique model: self
-]
-
-{ #category : #constants }
-NgramModel >> logarithmBase [
-	^ 2
 ]
 
 { #category : #probabilities }
@@ -106,11 +93,6 @@ NgramModel >> mostLikelyContinuations: history top: aNumber [
 { #category : #accessing }
 NgramModel >> order [ 
 	^ order
-]
-
-{ #category : #metrics }
-NgramModel >> perplexityOn: aText [
-	^ 2 ** (self crossEntropyOn: aText)
 ]
 
 { #category : #probabilities }
@@ -169,20 +151,4 @@ NgramModel >> vocabularySize [
 { #category : #testing }
 NgramModel >> wasTrained [
 	^ self vocabulary size > (self vocabulary numberOfReservedTokens)
-]
-
-{ #category : #metrics }
-NgramModel >> withProgressBarCrossEntropyOn: aText [
-	| ngrams ngram entropy |
-	ngrams := aText ngrams: self order padWith: self vocabulary padSymbol.
-	
-	entropy := 0.
-	
-	(1 to: ngrams size) do: [ :i |
-		ngram := ngrams at: i.
-		entropy := entropy + ((self probabilityOfNgram: ngram) log: self logarithmBase)
-	] displayingProgress:  [ :each | 'Approximating cross-entropy: ' , (-1 * 1 / each asFloat * entropy) asString ].
-	
-	entropy := -1 * 1 / ngrams size asFloat * entropy.
-	^ entropy
 ]

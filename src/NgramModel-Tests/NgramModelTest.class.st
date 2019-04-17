@@ -5,18 +5,6 @@ Class {
 }
 
 { #category : #tests }
-NgramModelTest >> testCrossEntropy [
-	| model text entropy |
-	model := NgramModel order: 2.
-	text := 'Lorem ipsum ipsum ipsum dolor'.
-	model trainOn: text.
-	
-	entropy := -1/6 * ({ 1 . 1 . 2/3 . 2/3 . 1/3 . 1 } collect: [ :x | x log: 2 ]) sum.
-	
-	self assert: (model crossEntropyOn: text) closeTo: entropy.
-]
-
-{ #category : #tests }
 NgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
 	| model ngram |
 	model := NgramModel order: 2.
@@ -57,26 +45,6 @@ NgramModelTest >> testEmptyModelWasNotTrained [
 	| model |
 	model := NgramModel order: 1.
 	self assert: model wasTrained not.
-]
-
-{ #category : #tests }
-NgramModelTest >> testLogarithmBase [
-	| model |
-	model := NgramModel order: 3.
-	self assert: model logarithmBase equals: 2.
-]
-
-{ #category : #tests }
-NgramModelTest >> testPerplexity [
-	| model text entropy perplexity |
-	model := NgramModel order: 2.
-	text := 'Lorem ipsum ipsum ipsum dolor'.
-	model trainOn: text.
-	
-	entropy := -1/6 * ({ 1 . 1 . 2/3 . 2/3 . 1/3 . 1 } collect: [ :x | x log: 2 ]) sum.
-	perplexity := 2 ** entropy.
-	
-	self assert: (model perplexityOn: text) closeTo: perplexity.
 ]
 
 { #category : #tests }
