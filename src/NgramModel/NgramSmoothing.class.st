@@ -19,11 +19,6 @@ NgramSmoothing >> model: aModel [
 ]
 
 { #category : #'as yet unclassified' }
-NgramSmoothing >> postTraining [
-	"Do nothing"
-]
-
-{ #category : #'as yet unclassified' }
 NgramSmoothing >> smoothedProbabilityOfNgram: ngram [
 	self subclassResponsibility 
 ]

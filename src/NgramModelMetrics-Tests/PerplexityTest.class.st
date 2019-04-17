@@ -9,7 +9,7 @@ PerplexityTest >> testPerplexityOfBigramModel [
 	| model text entropy expected actual |
 	model := NgramModel order: 2.
 	text := 'Lorem ipsum ipsum ipsum dolor'.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	entropy := -1/6 * ({ 1 . 1 . 2/3 . 2/3 . 1/3 . 1 } collect: [ :x | x log: 2 ]) sum.
 	expected := 2 ** entropy.

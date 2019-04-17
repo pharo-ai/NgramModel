@@ -120,11 +120,18 @@ NgramModel >> totalNgramCountInText [
 ]
 
 { #category : #training }
-NgramModel >> trainOn: aString [
+NgramModel >> trainOn: aCollectionOfSentences [
+	aCollectionOfSentences do: [ :each |
+		self trainOnSentence: each ].
+]
+
+{ #category : #training }
+NgramModel >> trainOnSentence: aString [
 	| ngrams words |
 	ngrams := aString ngramsWithDefaultPadding: self order.
 		
-	ngramCounts := ngrams asBag.
+	ngrams do: [ :each | ngramCounts add: each ].
+	
 	ngramCounts doWithOccurrences: [ :ngram :count |
 		historyCounts add: ngram history withOccurrences: count ].
 	
@@ -132,8 +139,6 @@ NgramModel >> trainOn: aString [
 	vocabulary add: aString defaultNgramPadding.
 	words := aString unigrams flatCollect: #asArray.
 	words do: [ :word | self vocabulary add: word ].
-	
-	self smoothingTechnique postTraining
 ]
 
 { #category : #accessing }

@@ -54,7 +54,7 @@ NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 2.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	vocab do: [ :firstWord |
 		sumOfProbabilities := vocab inject: 0 into: [ :sum :secondWord |
@@ -76,7 +76,7 @@ NgramModelTest >> testTrainedModelCounts [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model countOfNgram: ngram1) equals: 1.
 	self assert: (model countOfNgram: ngram2) equals: 1.
@@ -97,7 +97,7 @@ NgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfNgram: ngram1) equals: 1.
 	self assert: (model probabilityOfNgram: ngram2) equals: 1.
@@ -114,7 +114,7 @@ NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithKnownHistoryIs0 [
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram := #(ipsum hello) asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfNgram: ngram) equals: 0.
 ]
@@ -127,7 +127,7 @@ NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithUnknownHistoryIs0
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram := #(world hello) asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfNgram: ngram) equals: 0.
 ]
@@ -139,7 +139,7 @@ NgramModelTest >> testTrainedModelSelfProbabilityOfText [
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	self
 		assert: (model probabilityOfText: text)
 		closeTo: 2/3 * 2/3 * 1/3 asFloat.
@@ -151,7 +151,7 @@ NgramModelTest >> testTrainedModelSelfProbabilityOfUniformTextIs1 [
 	model := NgramModel order: 2.
 	
 	text := 'lorem ipsum dolor sit amet'.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfText: text) equals: 1.
 ]
@@ -164,7 +164,7 @@ NgramModelTest >> testTrainedModelVocabulary [
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	words := #('<s>' lorem ipsum dolor) asSet.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 
 	self assert: model vocabulary words equals: words.
 ]
@@ -173,7 +173,7 @@ NgramModelTest >> testTrainedModelVocabulary [
 NgramModelTest >> testTrainedModelWasTrained [
 	| model |
 	model := NgramModel order: 1.
-	model trainOn: 'Lorem ipsum dolor sit amet'.
+	model trainOnSentence: 'Lorem ipsum dolor sit amet'.
 	self assert: model wasTrained.
 ]
 
@@ -184,7 +184,7 @@ NgramModelTest >> testTrainedUnigramModelIsProbabilityDistribution [
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 1.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	sumOfProbabilities := vocab inject: 0 into: [ :sum :word |
 		ngram := { word } asNgram.

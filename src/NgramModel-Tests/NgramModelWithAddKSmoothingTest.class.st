@@ -28,7 +28,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedBigramModelIsProbabilityDistributi
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 2 withSmoothing: smoothing.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	vocab do: [ :firstWord |
 		sumOfProbabilities := vocab inject: 0 into: [ :sum :secondWord |
@@ -50,7 +50,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedModelCounts [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model countOfNgram: ngram1) equals: 1.
 	self assert: (model countOfNgram: ngram2) equals: 1.
@@ -73,7 +73,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedModelProbabilitiesOfNgrams [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfNgram: ngram1) equals: (1 + k) / (1 + (k * vocab size)) asFloat.
 	self assert: (model probabilityOfNgram: ngram2) equals: (1 + k) / (1 + (k * vocab size)) asFloat.
@@ -93,7 +93,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedModelSelfProbabilityOfText [
 	x2 := (2 + k) / (3 + (k * 4)) asFloat.
 	x3 := (1 + k) / (3 + (k * 4)) asFloat.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	self
 		assert: (model probabilityOfText: text)
 		closeTo: x1 ** 3 * (x2 ** 2) * x3 asFloat.
@@ -106,7 +106,7 @@ NgramModelWithAddKSmoothingTest >> testTrainedUnigramModelIsProbabilityDistribut
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 1 withSmoothing: smoothing.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	sumOfProbabilities := vocab inject: 0 into: [ :sum :word |
 		ngram := { word } asNgram.

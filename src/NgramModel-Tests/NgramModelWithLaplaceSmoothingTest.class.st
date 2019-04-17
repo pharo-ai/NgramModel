@@ -26,7 +26,7 @@ NgramModelWithLaplaceSmoothingTest >> testTrainedBigramModelIsProbabilityDistrib
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 2 withSmoothing: smoothing.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	vocab do: [ :firstWord |
 		sumOfProbabilities := vocab inject: 0 into: [ :sum :secondWord |
@@ -48,7 +48,7 @@ NgramModelWithLaplaceSmoothingTest >> testTrainedModelCounts [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model countOfNgram: ngram1) equals: 1.
 	self assert: (model countOfNgram: ngram2) equals: 1.
@@ -71,7 +71,7 @@ NgramModelWithLaplaceSmoothingTest >> testTrainedModelProbabilitiesOfNgrams [
 	ngram4 := #(ipsum dolor) asNgram.
 	ngram5 := #(dolor '<s>') asNgram.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	self assert: (model probabilityOfNgram: ngram1) equals: (1 + 1) / (1 + vocab size) asFloat.
 	self assert: (model probabilityOfNgram: ngram2) equals: (1 + 1) / (1 + vocab size) asFloat.
@@ -87,7 +87,7 @@ NgramModelWithLaplaceSmoothingTest >> testTrainedModelSelfProbabilityOfText [
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	
-	model trainOn: text.
+	model trainOnSentence: text.
 	self
 		assert: (model probabilityOfText: text)
 		closeTo: (2/5) ** 3 * ((3/7) ** 2) * 2/7 asFloat.
@@ -100,7 +100,7 @@ NgramModelWithLaplaceSmoothingTest >> testTrainedUnigramModelIsProbabilityDistri
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
 	model := NgramModel order: 1 withSmoothing: smoothing.
-	model trainOn: text.
+	model trainOnSentence: text.
 	
 	sumOfProbabilities := vocab inject: 0 into: [ :sum :word |
 		ngram := { word } asNgram.
