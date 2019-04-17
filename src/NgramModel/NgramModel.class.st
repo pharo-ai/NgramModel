@@ -104,7 +104,7 @@ NgramModel >> probabilityOfNgram: ngram [
 { #category : #probabilities }
 NgramModel >> probabilityOfText: aString [
 	| ngrams |
-	ngrams := aString ngrams: self order padWith: self vocabulary padSymbol.
+	ngrams := aString ngramsWithDefaultPadding: self order.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
 		inject: 1 into: [ :prod :each | prod * each ].
 ]
@@ -122,16 +122,14 @@ NgramModel >> totalNgramCountInText [
 { #category : #training }
 NgramModel >> trainOn: aString [
 	| ngrams words |
-	ngrams := aString
-		ngrams: self order
-		padWith: self vocabulary padSymbol.
+	ngrams := aString ngramsWithDefaultPadding: self order.
 		
 	ngramCounts := ngrams asBag.
 	ngramCounts doWithOccurrences: [ :ngram :count |
 		historyCounts add: ngram history withOccurrences: count ].
 	
 	vocabulary clear.
-	vocabulary add: vocabulary padSymbol.
+	vocabulary add: aString defaultNgramPadding.
 	words := aString unigrams flatCollect: #asArray.
 	words do: [ :word | self vocabulary add: word ].
 	

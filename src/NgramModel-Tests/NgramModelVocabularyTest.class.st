@@ -37,11 +37,6 @@ NgramModelVocabularyTest >> testNumberOfReservedTokens [
 ]
 
 { #category : #tests }
-NgramModelVocabularyTest >> testPadSymbol [
-	self assert: vocabulary padSymbol equals: '<s>'
-]
-
-{ #category : #tests }
 NgramModelVocabularyTest >> testVocabularySize [
 	self assert: vocabulary size equals: 2.
 ]

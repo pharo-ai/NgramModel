@@ -40,11 +40,6 @@ NgramModelVocabulary >> numberOfReservedTokens [
 ]
 
 { #category : #accessing }
-NgramModelVocabulary >> padSymbol [
-	^ '<s>'
-]
-
-{ #category : #accessing }
 NgramModelVocabulary >> recursiveNgramWithHistory: history maxOrder: order [
 	(history size = order)
 		ifTrue: [ ^ { { history asNgram } } ].
