@@ -55,7 +55,7 @@ NgramModel >> countOfUniqueNgramsWithHistory: ngram [
 { #category : #metrics }
 NgramModel >> crossEntropyOn: aText [
 	| ngrams |
-	ngrams := aText ngrams: self order pad: self vocabulary padSymbol.
+	ngrams := aText ngrams: self order padWith: self vocabulary padSymbol.
 	^ -1 * 1 / ngrams size asFloat * (ngrams collect: [ :ngram |
 		(self probabilityOfNgram: ngram) log: self logarithmBase ]) sum.
 ]
@@ -122,7 +122,7 @@ NgramModel >> probabilityOfNgram: ngram [
 { #category : #probabilities }
 NgramModel >> probabilityOfText: aString [
 	| ngrams |
-	ngrams := aString ngrams: self order pad: self vocabulary padSymbol.
+	ngrams := aString ngrams: self order padWith: self vocabulary padSymbol.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
 		inject: 1 into: [ :prod :each | prod * each ].
 ]
@@ -142,7 +142,7 @@ NgramModel >> trainOn: aString [
 	| ngrams words |
 	ngrams := aString
 		ngrams: self order
-		pad: self vocabulary padSymbol.
+		padWith: self vocabulary padSymbol.
 		
 	ngramCounts := ngrams asBag.
 	ngramCounts doWithOccurrences: [ :ngram :count |
