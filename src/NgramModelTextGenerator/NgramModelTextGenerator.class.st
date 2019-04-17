@@ -1,16 +1,16 @@
 Class {
-	#name : #NgramTextGenerator,
+	#name : #NgramModelTextGenerator,
 	#superclass : #Object,
 	#type : #variable,
 	#instVars : [
 		'model',
 		'history'
 	],
-	#category : #NgramTextGenerator
+	#category : #NgramModelTextGenerator
 }
 
 { #category : #initialization }
-NgramTextGenerator >> generateTextOfSize: aNumber [
+NgramModelTextGenerator >> generateTextOfSize: aNumber [
 	| words |
 	words := OrderedCollection new.
 	
@@ -22,7 +22,7 @@ NgramTextGenerator >> generateTextOfSize: aNumber [
 ]
 
 { #category : #initialization }
-NgramTextGenerator >> model: anObject [
+NgramModelTextGenerator >> model: anObject [
 	| order |
 	model := anObject.
 	order := model order - 1.
@@ -30,7 +30,7 @@ NgramTextGenerator >> model: anObject [
 ]
 
 { #category : #initialization }
-NgramTextGenerator >> nextWord [
+NgramModelTextGenerator >> nextWord [
 	| word |
 	word := (model mostLikelyContinuations: history top: 5) atRandom.
 	history := (history asArray copyWithoutFirst, { word }) asNgram.
