@@ -17,5 +17,5 @@ BaselineOfNgramModel >> baseline: spec [
 		spec 
 			package: 'NgramModel' with: [ spec requires: #('Ngram') ];
 			package: 'NgramModel-Tests' with: [ spec requires: #('NgramModel') ];
-			package: 'NgramTextGenerator' with: [ spec requires: #('NgramModel') ] ].
+			package: 'NgramModelTextGenerator' with: [ spec requires: #('NgramModel') ] ].
 ]
