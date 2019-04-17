@@ -174,7 +174,7 @@ NgramModel >> wasTrained [
 { #category : #metrics }
 NgramModel >> withProgressBarCrossEntropyOn: aText [
 	| ngrams ngram entropy |
-	ngrams := aText ngrams: self order pad: self vocabulary padSymbol.
+	ngrams := aText ngrams: self order padWith: self vocabulary padSymbol.
 	
 	entropy := 0.
 	
