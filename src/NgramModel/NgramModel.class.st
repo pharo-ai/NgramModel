@@ -102,6 +102,14 @@ NgramModel >> probabilityOfNgram: ngram [
 ]
 
 { #category : #probabilities }
+NgramModel >> probabilityOfSequence: aCollectionOfWords [
+	| ngrams |
+	ngrams := aCollectionOfWords ngramsWithDefaultPadding: self order.
+	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
+		inject: 1 into: [ :prod :each | prod * each ].
+]
+
+{ #category : #probabilities }
 NgramModel >> probabilityOfText: aString [
 	| ngrams |
 	ngrams := aString ngramsWithDefaultPadding: self order.
@@ -122,7 +130,7 @@ NgramModel >> totalNgramCountInText [
 { #category : #training }
 NgramModel >> trainOn: aCollectionOfSentences [
 	aCollectionOfSentences do: [ :each |
-		self trainOnSentence: each ].
+		self trainOnSentence: each ]
 ]
 
 { #category : #training }
