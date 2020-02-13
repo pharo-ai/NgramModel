@@ -62,7 +62,7 @@ NgramModel >> initialize [
 	super initialize.
 	ngramCounts := Bag new.
 	historyCounts := Bag new.
-	vocabulary := NgramModelVocabulary new.
+	vocabulary := Set with: String new defaultNgramPadding.
 ]
 
 { #category : #initialization }
@@ -143,8 +143,6 @@ NgramModel >> trainOnSentence: aString [
 	ngramCounts doWithOccurrences: [ :ngram :count |
 		historyCounts add: ngram history withOccurrences: count ].
 	
-	vocabulary clear.
-	vocabulary add: aString defaultNgramPadding.
 	words := aString unigrams flatCollect: #asArray.
 	words do: [ :word | self vocabulary add: word ].
 ]
@@ -157,9 +155,4 @@ NgramModel >> vocabulary [
 { #category : #accessing }
 NgramModel >> vocabularySize [
 	^ self vocabulary size
-]
-
-{ #category : #testing }
-NgramModel >> wasTrained [
-	^ self vocabulary size > (self vocabulary numberOfReservedTokens)
 ]

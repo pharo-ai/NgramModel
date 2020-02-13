@@ -13,13 +13,6 @@ NgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelHasEmptyVocabulary [
-	| model |
-	model := NgramModel order: 2.
-	self assert: model vocabulary isEmpty.
-]
-
-{ #category : #tests }
 NgramModelTest >> testEmptyModelHasTotalNgramCount0 [
 	| model |
 	model := NgramModel order: 2.
@@ -27,10 +20,11 @@ NgramModelTest >> testEmptyModelHasTotalNgramCount0 [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelHasVocabularyOfSize0 [
+NgramModelTest >> testEmptyModelHasVocabularyOfSize1 [
 	| model |
 	model := NgramModel order: 2.
-	self assert: model vocabulary size equals: 0.
+	self assert: model vocabulary size equals: 1.
+	self assert: (model vocabulary includes: String new defaultNgramPadding).
 ]
 
 { #category : #tests }
@@ -38,13 +32,6 @@ NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 	| model |
 	model := NgramModel order: 2.
 	self assert: model order equals: 2.
-]
-
-{ #category : #tests }
-NgramModelTest >> testEmptyModelWasNotTrained [
-	| model |
-	model := NgramModel order: 1.
-	self assert: model wasTrained not.
 ]
 
 { #category : #tests }
@@ -166,15 +153,7 @@ NgramModelTest >> testTrainedModelVocabulary [
 	
 	model trainOnSentence: text.
 
-	self assert: model vocabulary words equals: words.
-]
-
-{ #category : #tests }
-NgramModelTest >> testTrainedModelWasTrained [
-	| model |
-	model := NgramModel order: 1.
-	model trainOnSentence: 'Lorem ipsum dolor sit amet'.
-	self assert: model wasTrained.
+	self assert: model vocabulary equals: words.
 ]
 
 { #category : #tests }
