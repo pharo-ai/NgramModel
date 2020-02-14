@@ -72,7 +72,7 @@ NgramModel >> initializeOrder: aNumber andSmoothing: aSmoothingTechnique [
 	smoothingTechnique model: self
 ]
 
-{ #category : #probabilities }
+{ #category : #generation }
 NgramModel >> mostLikelyContinuation: history [
 	| ngramsWithHistory topOne |
 	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
@@ -80,7 +80,7 @@ NgramModel >> mostLikelyContinuation: history [
 	^ topOne last
 ]
 
-{ #category : #probabilities }
+{ #category : #generation }
 NgramModel >> mostLikelyContinuations: history top: aNumber [
 	| ngramsWithHistory lo topOnes |
 	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
@@ -134,25 +134,17 @@ NgramModel >> trainOn: aCollectionOfSentences [
 ]
 
 { #category : #training }
-NgramModel >> trainOnSentence: aString [
-	| ngrams words |
-	ngrams := aString ngramsWithDefaultPadding: self order.
+NgramModel >> trainOnSentence: aCollectionOrString [
+	| ngrams |
+	ngrams := aCollectionOrString ngramsWithDefaultPadding: self order.
 		
-	ngrams do: [ :each | ngramCounts add: each ].
-	
-	ngramCounts doWithOccurrences: [ :ngram :count |
-		historyCounts add: ngram history withOccurrences: count ].
-	
-	words := aString unigrams flatCollect: #asArray.
-	words do: [ :word | self vocabulary add: word ].
+	ngrams do: [ :each |
+		ngramCounts add: each.
+		historyCounts add: each history.
+		vocabulary addAll: each asArray ].
 ]
 
 { #category : #accessing }
 NgramModel >> vocabulary [
 	^ vocabulary
-]
-
-{ #category : #accessing }
-NgramModel >> vocabularySize [
-	^ self vocabulary size
 ]

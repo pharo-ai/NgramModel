@@ -28,5 +28,5 @@ NgramAddKSmoothing >> smoothedProbabilityOfNgram: ngram [
 	| ngramCount historyCount |
 	ngramCount := self model countOfNgram: ngram.
 	historyCount := self model countOfHistory: ngram history.
-	^ (ngramCount + self k) / (historyCount + (self k * self model vocabularySize)) asFloat
+	^ (ngramCount + self k) / (historyCount + (self k * self model vocabulary size)) asFloat
 ]
