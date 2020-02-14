@@ -82,11 +82,10 @@ NgramModel >> mostLikelyContinuation: history [
 
 { #category : #generation }
 NgramModel >> mostLikelyContinuations: history top: aNumber [
-	| ngramsWithHistory lo topOnes |
+	| ngramsWithHistory topOnes |
 	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
 	ngramsWithHistory := ngramsWithHistory sortedCounts.
-	lo := (ngramsWithHistory size - aNumber + 1) max: 1.
-	topOnes := (ngramsWithHistory copyFrom: lo to: ngramsWithHistory size) collect: #value.
+	topOnes := (ngramsWithHistory first: (aNumber min: ngramsWithHistory size)) collect: #value.
 	^ topOnes collect: #last
 ]
 
