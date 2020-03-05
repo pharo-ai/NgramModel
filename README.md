@@ -1,7 +1,7 @@
 # Ngram Language Model
 
 [![Build Status](https://travis-ci.org/pharo-ai/NgramModel.svg?branch=master)](https://travis-ci.org/pharo-ai/NgramModel)
-[![Build status](https://ci.appveyor.com/api/projects/status/nxwn8odf3q2fafo2?svg=true)](https://ci.appveyor.com/project/pharo-ai/ngrammodel)
+[![Build status](https://ci.appveyor.com/api/projects/status/jadnl13r37s01u0v?svg=true)](https://ci.appveyor.com/project/olekscode/ngrammodel-886ci)
 [![Coverage Status](https://coveralls.io/repos/github/pharo-ai/NgramModel/badge.svg?branch=master)](https://coveralls.io/github/pharo-ai/NgramModel?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/pharo-ai/NgramModel/master/LICENSE)
 
