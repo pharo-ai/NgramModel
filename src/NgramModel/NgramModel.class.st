@@ -116,6 +116,19 @@ NgramModel >> probabilityOfText: aString [
 		inject: 1 into: [ :prod :each | prod * each ].
 ]
 
+{ #category : #filtering }
+NgramModel >> removeNgramsWithCountsLessThan: aNumber [
+	| shouldBeRemoved |
+	
+	ngramCounts := ngramCounts rejectWithOccurrences: [ :each :count |
+		shouldBeRemoved := count < aNumber.
+		
+		shouldBeRemoved ifTrue: [ 
+			historyCounts remove: each history ].
+		
+		shouldBeRemoved ].
+]
+
 { #category : #accessing }
 NgramModel >> smoothingTechnique [
 	^ smoothingTechnique 
