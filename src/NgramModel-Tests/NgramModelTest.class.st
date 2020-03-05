@@ -35,6 +35,28 @@ NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 ]
 
 { #category : #tests }
+NgramModelTest >> testMinCountThreshold [
+	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	ngram1 := #('<s>' lorem) asNgram.
+	ngram2 := #(lorem ipsum) asNgram.
+	ngram3 := #(ipsum ipsum) asNgram.
+	ngram4 := #(ipsum dolor) asNgram.
+	ngram5 := #(dolor '<s>') asNgram.
+	
+	model trainOnSentence: text.
+	model removeNgramsWithCountsLessThan: 2.
+	
+	self assert: (model countOfNgram: ngram1) equals: 0.
+	self assert: (model countOfNgram: ngram2) equals: 0.
+	self assert: (model countOfNgram: ngram3) equals: 2.
+	self assert: (model countOfNgram: ngram4) equals: 0.
+	self assert: (model countOfNgram: ngram5) equals: 0.
+]
+
+{ #category : #tests }
 NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
 	| text vocab model ngram sumOfProbabilities |
 	text := 'Lorem ipsum dolor sit amet'.
