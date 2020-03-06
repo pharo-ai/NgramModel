@@ -74,6 +74,22 @@ NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
 ]
 
 { #category : #tests }
+NgramModelTest >> testTrainedEntireModelCountsAndProbability [
+	| model tokens |
+	model := NgramModel order: 2.
+	tokens := {'lorem ipsum dolor sit amet' substrings . 'lorem ipsum sit' substrings .
+			'lorem dolor amet' substrings} .	
+	model trainOn: tokens.
+	
+	self assert: (model countOfNgram: #(lorem ipsum) asNgram) equals: 2.
+	self assert: (model probabilityOfNgram: #(lorem ipsum) asNgram) equals: (2/3 asFloat).
+	self assert: (model probabilityOfNgram: #(lorem dolor) asNgram) equals: (1/3 asFloat).
+	self assert: (model probabilityOfNgram: #(lorem amet) asNgram) equals: 0.
+	self assert: (model countOfNgram: #(dolor sit) asNgram) equals: 1.
+	self assert: (model probabilityOfNgram: #(dolor sit) asNgram) equals: (1/2 asFloat).
+]
+
+{ #category : #tests }
 NgramModelTest >> testTrainedModelCounts [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
 	model := NgramModel order: 2.
