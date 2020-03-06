@@ -38,8 +38,10 @@ NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 NgramModelTest >> testEntireTrainedModelCounts [
 	| model tokens |
 	model := NgramModel order: 2.
-	tokens := {'lorem ipsum dolor sit amet' substrings. 'lorem ipsum sit' substrings.
-			'lorem dolor amet' substrings}.
+	tokens := #(
+			(lorem ipsum dolor sit amet)
+			(lorem ipsum sit)
+			(lorem dolor amet)).
 	model trainOn: tokens.
 	
 	self assert: (model countOfNgram: #(lorem ipsum) asNgram) equals: 2.
@@ -47,17 +49,46 @@ NgramModelTest >> testEntireTrainedModelCounts [
 ]
 
 { #category : #tests }
+NgramModelTest >> testEntireTrainedModelCountsIfNgramsNotKnown [
+	| model tokens |
+	model := NgramModel order: 2.
+	tokens := #(
+			(lorem ipsum dolor sit amet)
+			(lorem ipsum sit)
+			(lorem dolor amet)).
+	model trainOn: tokens.
+
+	self assert: (model countOfNgram: #(ipsum lorem) asNgram) equals: 0.
+	self assert: (model countOfNgram: #(hello world) asNgram) equals: 0.
+]
+
+{ #category : #tests }
 NgramModelTest >> testEntireTrainedModelProbabilities [
 	| model tokens |
 	model := NgramModel order: 2.
-	tokens := {'lorem ipsum dolor sit amet' substrings. 'lorem ipsum sit' substrings.
-			'lorem dolor amet' substrings}.
+	tokens := #(
+			(lorem ipsum dolor sit amet)
+			(lorem ipsum sit)
+			(lorem dolor amet)).
 	model trainOn: tokens.
 	
 	self assert: (model probabilityOfNgram: #(lorem ipsum) asNgram) equals: (2/3 asFloat).
 	self assert: (model probabilityOfNgram: #(lorem dolor) asNgram) equals: (1/3 asFloat).
-	self assert: (model probabilityOfNgram: #(lorem amet) asNgram) equals: 0.
 	self assert: (model probabilityOfNgram: #(dolor sit) asNgram) equals: (1/2 asFloat).
+]
+
+{ #category : #tests }
+NgramModelTest >> testEntireTrainedModelProbabilitiesIfNgramsNotKnown [
+	| model tokens |
+	model := NgramModel order: 2.
+	tokens := #(
+			(lorem ipsum dolor sit amet)
+			(lorem ipsum sit)
+			(lorem dolor amet)).
+	model trainOn: tokens.
+
+	self assert: (model probabilityOfNgram: #(lorem amet) asNgram) equals: 0.
+	self assert: (model probabilityOfNgram: #(hello world) asNgram) equals: 0.
 ]
 
 { #category : #tests }
