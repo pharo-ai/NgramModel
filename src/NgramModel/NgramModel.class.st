@@ -129,6 +129,31 @@ NgramModel >> removeNgramsWithCountsLessThan: aNumber [
 		shouldBeRemoved ].
 ]
 
+{ #category : #utilities }
+NgramModel >> saveCounts: aDictionary toFile: aFileReference [
+	| stream |
+	stream := aFileReference writeStream.
+	aDictionary associationsDo: [ :each |
+		stream nextPutAll: (' ' join: each key asArray, ',', each value asString); cr ].
+	stream close
+]
+
+{ #category : #utilities }
+NgramModel >> saveToDirectory: aDirectory [
+
+	self saveCounts: ngramCounts toFile: aDirectory / 'ngram_counts.csv'.
+	self saveCounts: historyCounts toFile: aDirectory / 'history_counts.csv'.
+	self saveVocabularyToFile: aDirectory / 'vocabulary.csv'
+]
+
+{ #category : #utilities }
+NgramModel >> saveVocabularyToFile: aFileReference [
+	| stream |
+	stream := aFileReference writeStream.
+	vocabulary do: [ :each | stream nextPutAll: each asString; cr ].
+	stream close
+]
+
 { #category : #accessing }
 NgramModel >> smoothingTechnique [
 	^ smoothingTechnique 
