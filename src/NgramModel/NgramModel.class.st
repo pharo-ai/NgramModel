@@ -12,9 +12,19 @@ Class {
 	#category : #NgramModel
 }
 
+{ #category : #utilities }
+NgramModel class >> historyCountsFileName [
+	^ 'history_counts.csv'
+]
+
 { #category : #accessing }
 NgramModel class >> new [ 
 	self shouldNotImplement 
+]
+
+{ #category : #utilities }
+NgramModel class >> ngramCountsFileName [
+	^ 'ngram_counts.csv'
 ]
 
 { #category : #accessing }
@@ -29,6 +39,47 @@ NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
 	^ super new
 		initializeOrder: aNumber andSmoothing: aSmoothingTechnique;
 		yourself.
+]
+
+{ #category : #utilities }
+NgramModel class >> readCountsFromFile: aFileReference [
+	| counts stream values ngram count |
+	counts := Dictionary new.
+	stream := aFileReference readStream.
+	[stream atEnd] whileFalse: [ 
+		values := stream nextLine substrings: ','.
+		ngram := values first substrings asNgram.
+		count := values second asNumber.
+		counts at: ngram put: count ].
+	stream close.
+	^ counts
+]
+
+{ #category : #utilities }
+NgramModel class >> readFromDirectory: aFileReference [
+	| historyCounts ngramCounts vocabulary |
+	historyCounts := self readCountsFromFile: (aFileReference / self historyCountsFileName).
+	ngramCounts := self readCountsFromFile: (aFileReference / self ngramCountsFileName).
+	vocabulary := self readVocabularyFromFile: (aFileReference / self vocabularyFileName).
+	^ super new initializeHistoryCounts: historyCounts
+				  ngramCounts: ngramCounts
+				  vocabulary: vocabulary
+]
+
+{ #category : #utilities }
+NgramModel class >> readVocabularyFromFile: aFileReference [
+	| set stream |
+	set := Set new.
+	stream := aFileReference readStream.
+	[stream atEnd] whileFalse:
+			[ set add: stream nextLine ].
+	stream close.
+	^ set
+]
+
+{ #category : #utilities }
+NgramModel class >> vocabularyFileName [
+	^ 'vocabulary.csv'
 ]
 
 { #category : #counts }
@@ -63,6 +114,13 @@ NgramModel >> initialize [
 	ngramCounts := Bag new.
 	historyCounts := Bag new.
 	vocabulary := Set with: String new defaultNgramPadding.
+]
+
+{ #category : #initialization }
+NgramModel >> initializeHistoryCounts: aHistoryTable ngramCounts: anNgramTable vocabulary: aVocabulary [
+	historyCounts := aHistoryTable.
+	ngramCounts := anNgramTable.
+	vocabulary := aVocabulary
 ]
 
 { #category : #initialization }
@@ -144,9 +202,9 @@ NgramModel >> saveCounts: aDictionary toFile: aFileReference [
 { #category : #utilities }
 NgramModel >> saveToDirectory: aDirectory [
 
-	self saveCounts: ngramCounts toFile: aDirectory / 'ngram_counts.csv'.
-	self saveCounts: historyCounts toFile: aDirectory / 'history_counts.csv'.
-	self saveVocabularyToFile: aDirectory / 'vocabulary.csv'
+	self saveCounts: ngramCounts toFile: aDirectory / self class ngramCountsFileName.
+	self saveCounts: historyCounts toFile: aDirectory / self class historyCountsFileName.
+	self saveVocabularyToFile: aDirectory / self class vocabularyFileName
 ]
 
 { #category : #utilities }
