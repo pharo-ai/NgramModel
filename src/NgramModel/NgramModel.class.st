@@ -131,10 +131,13 @@ NgramModel >> removeNgramsWithCountsLessThan: aNumber [
 
 { #category : #utilities }
 NgramModel >> saveCounts: aDictionary toFile: aFileReference [
-	| stream |
+	| stream ngramString countString |
 	stream := aFileReference writeStream.
 	aDictionary associationsDo: [ :each |
-		stream nextPutAll: (' ' join: each key asArray, ',', each value asString); cr ].
+		ngramString := ' ' join: (each key asArray collect: [ :word | word asString ]).
+		countString := each value asString.
+		stream nextPutAll: (ngramString, ',', countString);
+				 cr ].
 	stream close
 ]
 
