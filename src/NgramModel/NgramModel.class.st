@@ -12,7 +12,7 @@ Class {
 	#category : #NgramModel
 }
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> historyCountsFileName [
 	^ 'history_counts.csv'
 ]
@@ -22,7 +22,7 @@ NgramModel class >> new [
 	self shouldNotImplement 
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> ngramCountsFileName [
 	^ 'ngram_counts.csv'
 ]
@@ -41,43 +41,53 @@ NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
 		yourself.
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> readCountsFromFile: aFileReference [
 	| counts stream values ngram count |
-	counts := Dictionary new.
+	counts := Bag new.
 	stream := aFileReference readStream.
+	
+	
 	[stream atEnd] whileFalse: [ 
 		values := stream nextLine substrings: ','.
 		ngram := values first substrings asNgram.
 		count := values second asNumber.
-		counts at: ngram put: count ].
+		counts add: ngram withOccurrences: count ].
+	
 	stream close.
 	^ counts
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> readFromDirectory: aFileReference [
-	| historyCounts ngramCounts vocabulary |
+	| historyCounts ngramCounts vocabulary order |
+	
 	historyCounts := self readCountsFromFile: (aFileReference / self historyCountsFileName).
 	ngramCounts := self readCountsFromFile: (aFileReference / self ngramCountsFileName).
 	vocabulary := self readVocabularyFromFile: (aFileReference / self vocabularyFileName).
-	^ super new initializeHistoryCounts: historyCounts
-				  ngramCounts: ngramCounts
-				  vocabulary: vocabulary
+	
+	order := ngramCounts anyOne order.
+	
+	^ (self order: order)
+		initializeHistoryCounts: historyCounts
+		ngramCounts: ngramCounts
+		vocabulary: vocabulary
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> readVocabularyFromFile: aFileReference [
-	| set stream |
-	set := Set new.
+	| vocabulary stream |
+	vocabulary := Set new.
 	stream := aFileReference readStream.
-	[stream atEnd] whileFalse:
-			[ set add: stream nextLine ].
+	
+	[stream atEnd] whileFalse: [
+		vocabulary add: stream nextLine ].
+	
 	stream close.
-	^ set
+	^ vocabulary
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel class >> vocabularyFileName [
 	^ 'vocabulary.csv'
 ]
@@ -120,7 +130,7 @@ NgramModel >> initialize [
 NgramModel >> initializeHistoryCounts: aHistoryTable ngramCounts: anNgramTable vocabulary: aVocabulary [
 	historyCounts := aHistoryTable.
 	ngramCounts := anNgramTable.
-	vocabulary := aVocabulary
+	vocabulary := aVocabulary.
 ]
 
 { #category : #initialization }
@@ -187,27 +197,32 @@ NgramModel >> removeNgramsWithCountsLessThan: aNumber [
 		shouldBeRemoved ].
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel >> saveCounts: aDictionary toFile: aFileReference [
 	| stream ngramString countString |
 	stream := aFileReference writeStream.
+	
 	aDictionary associationsDo: [ :each |
-		ngramString := ' ' join: (each key asArray collect: [ :word | word asString ]).
+		ngramString := ' ' join: each key asArray.
 		countString := each value asString.
-		stream nextPutAll: (ngramString, ',', countString);
-				 cr ].
+		
+		stream
+			nextPutAll: ngramString;
+			nextPutAll: ',';
+			nextPutAll: countString;
+			cr ].
+		
 	stream close
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel >> saveToDirectory: aDirectory [
-
 	self saveCounts: ngramCounts toFile: aDirectory / self class ngramCountsFileName.
 	self saveCounts: historyCounts toFile: aDirectory / self class historyCountsFileName.
 	self saveVocabularyToFile: aDirectory / self class vocabularyFileName
 ]
 
-{ #category : #utilities }
+{ #category : #'file in/out' }
 NgramModel >> saveVocabularyToFile: aFileReference [
 	| stream |
 	stream := aFileReference writeStream.
