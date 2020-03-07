@@ -11,7 +11,7 @@ BaselineOfNgramModel >> baseline: spec [
 		"External dependencies"
 		spec
 			baseline: 'Ngram'
-			with: [ spec repository: 'github://olekscode/Ngram/src' ].
+			with: [ spec repository: 'github://pharo-ai/Ngram/src' ].
 				
 		"Packages"
 		spec 
