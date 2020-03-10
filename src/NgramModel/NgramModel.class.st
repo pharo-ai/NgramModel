@@ -51,7 +51,7 @@ NgramModel class >> readCountsFromFile: aFileReference [
 	[stream atEnd] whileFalse: [ 
 		values := stream nextLine substrings: ','.
 		ngram := values first substrings asNgram.
-		count := values second asNumber.
+		count := values last asNumber.
 		counts add: ngram withOccurrences: count ].
 	
 	stream close.
