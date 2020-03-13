@@ -1,7 +1,6 @@
 Class {
 	#name : #NgramModelTextGenerator,
 	#superclass : #Object,
-	#type : #variable,
 	#instVars : [
 		'model',
 		'history'

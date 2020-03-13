@@ -1,7 +1,6 @@
 Class {
 	#name : #NgramLaplaceSmoothing,
 	#superclass : #NgramAddKSmoothing,
-	#type : #variable,
 	#category : #NgramModel
 }
 
