@@ -1,7 +1,6 @@
 Class {
 	#name : #NgramAddKSmoothing,
 	#superclass : #NgramSmoothing,
-	#type : #variable,
 	#instVars : [
 		'k'
 	],

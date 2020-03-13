@@ -1,7 +1,6 @@
 Class {
 	#name : #NgramModel,
 	#superclass : #Object,
-	#type : #variable,
 	#instVars : [
 		'order',
 		'smoothingTechnique',
