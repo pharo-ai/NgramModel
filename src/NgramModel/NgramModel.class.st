@@ -13,11 +13,6 @@ Class {
 }
 
 { #category : #accessing }
-NgramModel class >> new [ 
-	self shouldNotImplement 
-]
-
-{ #category : #accessing }
 NgramModel class >> order: aNumber [
 	| defaultSmoothingTechnique |
 	defaultSmoothingTechnique := NgramNoSmoothing new.
@@ -26,7 +21,7 @@ NgramModel class >> order: aNumber [
 
 { #category : #accessing }
 NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
-	^ super new
+	^ self new
 		initializeOrder: aNumber andSmoothing: aSmoothingTechnique;
 		yourself.
 ]
