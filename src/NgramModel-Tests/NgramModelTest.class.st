@@ -152,6 +152,25 @@ NgramModelTest >> testTrainedModelCounts [
 ]
 
 { #category : #tests }
+NgramModelTest >> testTrainedModelLogProbabilityOfText [
+	| model text |
+	model := NgramModel order: 2.
+	
+	text := 'lorem ipsum ipsum ipsum dolor'.
+	"<s> lorem 1
+	lorem ipsum 1
+	ipsum ipsum 2/3
+	ipsum ipsum 2/3
+	ipsum dolor 1/3
+	dolor <s> 1"
+	
+	model trainOnSentence: text.
+	self
+		assert: (model logProbabilityOfText: text)
+		closeTo: (1 log + 1 log + (2/3) log + (2/3) log + (1/3) log + 1 log) asFloat.
+]
+
+{ #category : #tests }
 NgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
 	model := NgramModel order: 2.
@@ -204,11 +223,17 @@ NgramModelTest >> testTrainedModelSelfProbabilityOfText [
 	model := NgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
-	
+	"<s> lorem 1
+	lorem ipsum 1
+	ipsum ipsum 2/3
+	ipsum ipsum 2/3
+	ipsum dolor 1/3
+	dolor <s> 1"
+
 	model trainOnSentence: text.
 	self
 		assert: (model probabilityOfText: text)
-		closeTo: 2/3 * 2/3 * 1/3 asFloat.
+		closeTo: (1 * 1 * 2/3 * 2/3 * 1/3 * 1) asFloat.
 ]
 
 { #category : #tests }

@@ -84,7 +84,7 @@ NgramModel >> logProbabilityOfText: aString [
 	| ngrams |
 	ngrams := aString ngramsWithDefaultPadding: self order.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
-		inject: 1 into: [ :prod :each | prod + each log ].
+		inject: 0 into: [ :sum :each | sum + each log ].
 ]
 
 { #category : #generation }
