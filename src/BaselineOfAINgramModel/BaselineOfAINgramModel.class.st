@@ -16,5 +16,5 @@ BaselineOfAINgramModel >> baseline: spec [
 			package: 'AI-Ngram-Tests' with: [ spec requires: #( 'AI-Ngram' ) ];
 			package: 'AI-NgramModel-Tests' with: [ spec requires: #( 'AI-NgramModel' ) ].
 
-		spec group: 'Ngram-core' with: #( 'Ngram' 'Ngram-Tests' ) ]
+		spec group: 'Ngram-core' with: #( 'AI-Ngram' 'AI-Ngram-Tests' ) ]
 ]
