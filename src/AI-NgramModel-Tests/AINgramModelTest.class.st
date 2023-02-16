@@ -1,43 +1,43 @@
 Class {
-	#name : #NgramModelTest,
+	#name : #AINgramModelTest,
 	#superclass : #TestCase,
 	#category : #'AI-NgramModel-Tests'
 }
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
+AINgramModelTest >> testEmptyModelAssignsZeroCountToNgramOfRightOrder [
 	| model ngram |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	ngram := #(lorem ipsum) asNgram.
 	self assert: (model countOfNgram: ngram) equals: 0.
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelHasTotalNgramCount0 [
+AINgramModelTest >> testEmptyModelHasTotalNgramCount0 [
 	| model |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	self assert: model totalNgramCountInText equals: 0.
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelHasVocabularyOfSize1 [
+AINgramModelTest >> testEmptyModelHasVocabularyOfSize1 [
 	| model |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	self assert: model vocabulary size equals: 1.
 	self assert: (model vocabulary includes: String new defaultNgramPadding).
 ]
 
 { #category : #tests }
-NgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
+AINgramModelTest >> testEmptyModelOfOrder2HasOrder2 [
 	| model |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	self assert: model order equals: 2.
 ]
 
 { #category : #tests }
-NgramModelTest >> testEntireTrainedModelCounts [
+AINgramModelTest >> testEntireTrainedModelCounts [
 	| model tokens |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	tokens := #(
 			(lorem ipsum dolor sit amet)
 			(lorem ipsum sit)
@@ -49,9 +49,9 @@ NgramModelTest >> testEntireTrainedModelCounts [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEntireTrainedModelCountsIfNgramsNotKnown [
+AINgramModelTest >> testEntireTrainedModelCountsIfNgramsNotKnown [
 	| model tokens |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	tokens := #(
 			(lorem ipsum dolor sit amet)
 			(lorem ipsum sit)
@@ -63,9 +63,9 @@ NgramModelTest >> testEntireTrainedModelCountsIfNgramsNotKnown [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEntireTrainedModelProbabilities [
+AINgramModelTest >> testEntireTrainedModelProbabilities [
 	| model tokens |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	tokens := #(
 			(lorem ipsum dolor sit amet)
 			(lorem ipsum sit)
@@ -78,9 +78,9 @@ NgramModelTest >> testEntireTrainedModelProbabilities [
 ]
 
 { #category : #tests }
-NgramModelTest >> testEntireTrainedModelProbabilitiesIfNgramsNotKnown [
+AINgramModelTest >> testEntireTrainedModelProbabilitiesIfNgramsNotKnown [
 	| model tokens |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	tokens := #(
 			(lorem ipsum dolor sit amet)
 			(lorem ipsum sit)
@@ -92,9 +92,9 @@ NgramModelTest >> testEntireTrainedModelProbabilitiesIfNgramsNotKnown [
 ]
 
 { #category : #tests }
-NgramModelTest >> testMinCountThreshold [
+AINgramModelTest >> testMinCountThreshold [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram1 := #('<s>' lorem) asNgram.
@@ -114,12 +114,12 @@ NgramModelTest >> testMinCountThreshold [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
+AINgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
 	| text vocab model ngram sumOfProbabilities |
 	text := 'Lorem ipsum dolor sit amet'.
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	model trainOnSentence: text.
 	
 	vocab do: [ :firstWord |
@@ -131,9 +131,9 @@ NgramModelTest >> testTrainedBigramModelIsProbabilityDistribution [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelCounts [
+AINgramModelTest >> testTrainedModelCounts [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram1 := #('<s>' lorem) asNgram.
@@ -152,9 +152,9 @@ NgramModelTest >> testTrainedModelCounts [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelLogProbabilityOfText [
+AINgramModelTest >> testTrainedModelLogProbabilityOfText [
 	| model text |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	"<s> lorem 1
@@ -171,9 +171,9 @@ NgramModelTest >> testTrainedModelLogProbabilityOfText [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
+AINgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
 	| model text ngram1 ngram2 ngram3 ngram4 ngram5 |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram1 := #('<s>' lorem) asNgram.
@@ -192,9 +192,9 @@ NgramModelTest >> testTrainedModelProbabilitiesOfNgrams [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithKnownHistoryIs0 [
+AINgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithKnownHistoryIs0 [
 	| model text ngram |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram := #(ipsum hello) asNgram.
@@ -205,9 +205,9 @@ NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithKnownHistoryIs0 [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithUnknownHistoryIs0 [
+AINgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithUnknownHistoryIs0 [
 	| model text ngram |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	ngram := #(world hello) asNgram.
@@ -218,9 +218,9 @@ NgramModelTest >> testTrainedModelProbabilityOfUnknownNgramWithUnknownHistoryIs0
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelSelfProbabilityOfText [
+AINgramModelTest >> testTrainedModelSelfProbabilityOfText [
 	| model text |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	"<s> lorem 1
@@ -237,9 +237,9 @@ NgramModelTest >> testTrainedModelSelfProbabilityOfText [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelSelfProbabilityOfUniformTextIs1 [
+AINgramModelTest >> testTrainedModelSelfProbabilityOfUniformTextIs1 [
 	| model text |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum dolor sit amet'.
 	model trainOnSentence: text.
@@ -248,9 +248,9 @@ NgramModelTest >> testTrainedModelSelfProbabilityOfUniformTextIs1 [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedModelVocabulary [
+AINgramModelTest >> testTrainedModelVocabulary [
 	| model text words |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	
 	text := 'lorem ipsum ipsum ipsum dolor'.
 	words := #('<s>' lorem ipsum dolor) asSet.
@@ -261,12 +261,12 @@ NgramModelTest >> testTrainedModelVocabulary [
 ]
 
 { #category : #tests }
-NgramModelTest >> testTrainedUnigramModelIsProbabilityDistribution [
+AINgramModelTest >> testTrainedUnigramModelIsProbabilityDistribution [
 	| text vocab model ngram sumOfProbabilities |
 	text := 'Lorem ipsum dolor sit amet'.
 	vocab := #('<s>' Lorem ipsum dolor sit amet).
 	
-	model := NgramModel order: 1.
+	model := AINgramModel order: 1.
 	model trainOnSentence: text.
 	
 	sumOfProbabilities := vocab inject: 0 into: [ :sum :word |

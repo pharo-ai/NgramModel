@@ -1,5 +1,5 @@
 Class {
-	#name : #NgramModelTextGenerator,
+	#name : #AINgramModelTextGenerator,
 	#superclass : #Object,
 	#instVars : [
 		'model',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #initialization }
-NgramModelTextGenerator >> generateTextOfSize: aNumber [
+AINgramModelTextGenerator >> generateTextOfSize: aNumber [
 	| words |
 	words := OrderedCollection new.
 	
@@ -21,7 +21,7 @@ NgramModelTextGenerator >> generateTextOfSize: aNumber [
 ]
 
 { #category : #initialization }
-NgramModelTextGenerator >> model: anObject [
+AINgramModelTextGenerator >> model: anObject [
 	| order |
 	model := anObject.
 	order := model order - 1.
@@ -29,7 +29,7 @@ NgramModelTextGenerator >> model: anObject [
 ]
 
 { #category : #initialization }
-NgramModelTextGenerator >> nextWord [
+AINgramModelTextGenerator >> nextWord [
 	| word |
 	word := (model mostLikelyContinuations: history top: 5) atRandom.
 	history := (history asArray copyWithoutFirst, { word }) asNgram.

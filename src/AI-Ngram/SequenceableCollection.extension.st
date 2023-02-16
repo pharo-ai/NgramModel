@@ -2,7 +2,7 @@ Extension { #name : #SequenceableCollection }
 
 { #category : #'*AI-Ngram' }
 SequenceableCollection >> asNgram [
-	^ Ngram withElements: self
+	^ AINgram withElements: self
 ]
 
 { #category : #'*AI-Ngram' }

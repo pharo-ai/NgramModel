@@ -1,11 +1,11 @@
 Class {
-	#name : #NgramNoSmoothing,
-	#superclass : #NgramSmoothing,
+	#name : #AINgramNoSmoothing,
+	#superclass : #AINgramSmoothing,
 	#category : #'AI-NgramModel'
 }
 
 { #category : #'as yet unclassified' }
-NgramNoSmoothing >> smoothedProbabilityOfNgram: ngram [
+AINgramNoSmoothing >> smoothedProbabilityOfNgram: ngram [
 	"Probability of n-gram is a conditional probability of its last word w given the history h (n-gram of order n-1): P(w|h) = C(hw) / C(h)"
 	| ngramCount historyCount |
 	ngramCount := self model countOfNgram: ngram.

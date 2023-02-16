@@ -1,5 +1,5 @@
 Class {
-	#name : #NgramModel,
+	#name : #AINgramModel,
 	#superclass : #Object,
 	#instVars : [
 		'order',
@@ -12,53 +12,53 @@ Class {
 }
 
 { #category : #accessing }
-NgramModel class >> order: aNumber [
+AINgramModel class >> order: aNumber [
 	| defaultSmoothingTechnique |
-	defaultSmoothingTechnique := NgramNoSmoothing new.
+	defaultSmoothingTechnique := AINgramNoSmoothing new.
 	^ self order: aNumber withSmoothing: defaultSmoothingTechnique
 ]
 
 { #category : #accessing }
-NgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
+AINgramModel class >> order: aNumber withSmoothing: aSmoothingTechnique [
 	^ self new
 		initializeOrder: aNumber andSmoothing: aSmoothingTechnique;
 		yourself.
 ]
 
 { #category : #'file in/out' }
-NgramModel class >> readFromFile: aFileReference [
+AINgramModel class >> readFromFile: aFileReference [
     ^ aFileReference readStreamDo: [ :readStream |
         STON fromStream: readStream ]
 ]
 
 { #category : #counts }
-NgramModel >> countOfHistory: ngram [
+AINgramModel >> countOfHistory: ngram [
 	^ historyCounts occurrencesOf: ngram
 ]
 
 { #category : #counts }
-NgramModel >> countOfNgram: ngram [
+AINgramModel >> countOfNgram: ngram [
 	^ ngramCounts occurrencesOf: ngram
 ]
 
 { #category : #counts }
-NgramModel >> countOfUniqueNgramsEndingWith: aWord [
+AINgramModel >> countOfUniqueNgramsEndingWith: aWord [
 	^ (ngramCounts asSet select: [ :ngram | ngram last = aWord ]) size
 ]
 
 { #category : #counts }
-NgramModel >> countOfUniqueNgramsWithHistory: ngram [
+AINgramModel >> countOfUniqueNgramsWithHistory: ngram [
 	^ (ngramCounts asSet
 		select: [ :eachNgram | eachNgram history = ngram ]) size.
 ]
 
 { #category : #accessing }
-NgramModel >> historyCounts [
+AINgramModel >> historyCounts [
 	^ historyCounts
 ]
 
 { #category : #initialization }
-NgramModel >> initialize [ 
+AINgramModel >> initialize [ 
 	super initialize.
 	ngramCounts := Bag new.
 	historyCounts := Bag new.
@@ -66,21 +66,21 @@ NgramModel >> initialize [
 ]
 
 { #category : #initialization }
-NgramModel >> initializeHistoryCounts: aHistoryTable ngramCounts: anNgramTable vocabulary: aVocabulary [
+AINgramModel >> initializeHistoryCounts: aHistoryTable ngramCounts: anNgramTable vocabulary: aVocabulary [
 	historyCounts := aHistoryTable.
 	ngramCounts := anNgramTable.
 	vocabulary := aVocabulary.
 ]
 
 { #category : #initialization }
-NgramModel >> initializeOrder: aNumber andSmoothing: aSmoothingTechnique [
+AINgramModel >> initializeOrder: aNumber andSmoothing: aSmoothingTechnique [
 	order := aNumber.
 	smoothingTechnique := aSmoothingTechnique.
 	smoothingTechnique model: self
 ]
 
 { #category : #probabilities }
-NgramModel >> logProbabilityOfText: aString [
+AINgramModel >> logProbabilityOfText: aString [
 	| ngrams |
 	ngrams := aString ngramsWithDefaultPadding: self order.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
@@ -88,7 +88,7 @@ NgramModel >> logProbabilityOfText: aString [
 ]
 
 { #category : #generation }
-NgramModel >> mostLikelyContinuation: history [
+AINgramModel >> mostLikelyContinuation: history [
 	| ngramsWithHistory topOne |
 	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
 	topOne := ngramsWithHistory sortedCounts first value.
@@ -96,7 +96,7 @@ NgramModel >> mostLikelyContinuation: history [
 ]
 
 { #category : #generation }
-NgramModel >> mostLikelyContinuations: history top: aNumber [
+AINgramModel >> mostLikelyContinuations: history top: aNumber [
 	| ngramsWithHistory topOnes |
 	ngramsWithHistory := ngramCounts select: [ :ngram | ngram history = history ].
 	ngramsWithHistory := ngramsWithHistory sortedCounts.
@@ -105,18 +105,18 @@ NgramModel >> mostLikelyContinuations: history top: aNumber [
 ]
 
 { #category : #accessing }
-NgramModel >> order [ 
+AINgramModel >> order [ 
 	^ order
 ]
 
 { #category : #probabilities }
-NgramModel >> probabilityOfNgram: ngram [
+AINgramModel >> probabilityOfNgram: ngram [
 	"Probability of n-gram is a conditional probability of its last word w given the history h (n-gram of order n-1): P(w|h)"
 	^ self smoothingTechnique smoothedProbabilityOfNgram: ngram
 ]
 
 { #category : #probabilities }
-NgramModel >> probabilityOfSequence: aCollectionOfWords [
+AINgramModel >> probabilityOfSequence: aCollectionOfWords [
 	| ngrams |
 	ngrams := aCollectionOfWords ngramsWithDefaultPadding: self order.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
@@ -124,7 +124,7 @@ NgramModel >> probabilityOfSequence: aCollectionOfWords [
 ]
 
 { #category : #probabilities }
-NgramModel >> probabilityOfText: aString [
+AINgramModel >> probabilityOfText: aString [
 	| ngrams |
 	ngrams := aString ngramsWithDefaultPadding: self order.
 	^ (ngrams collect: [ :ngram | self probabilityOfNgram: ngram ])
@@ -132,7 +132,7 @@ NgramModel >> probabilityOfText: aString [
 ]
 
 { #category : #filtering }
-NgramModel >> removeNgramsWithCountsLessThan: aNumber [
+AINgramModel >> removeNgramsWithCountsLessThan: aNumber [
 	| shouldBeRemoved |
 	
 	ngramCounts := ngramCounts rejectWithOccurrences: [ :each :count |
@@ -145,29 +145,29 @@ NgramModel >> removeNgramsWithCountsLessThan: aNumber [
 ]
 
 { #category : #'file in/out' }
-NgramModel >> saveToFile: aFileReference [ 
+AINgramModel >> saveToFile: aFileReference [ 
     aFileReference writeStreamDo: [ :writeStream |
         STON put: self onStream: writeStream ]
 ]
 
 { #category : #accessing }
-NgramModel >> smoothingTechnique [
+AINgramModel >> smoothingTechnique [
 	^ smoothingTechnique 
 ]
 
 { #category : #accessing }
-NgramModel >> totalNgramCountInText [
+AINgramModel >> totalNgramCountInText [
 	^ ngramCounts size
 ]
 
 { #category : #training }
-NgramModel >> trainOn: aCollectionOfSentences [
+AINgramModel >> trainOn: aCollectionOfSentences [
 	aCollectionOfSentences do: [ :each |
 		self trainOnSentence: each ]
 ]
 
 { #category : #training }
-NgramModel >> trainOnSentence: aCollectionOrString [
+AINgramModel >> trainOnSentence: aCollectionOrString [
 	| ngrams |
 	ngrams := aCollectionOrString ngramsWithDefaultPadding: self order.
 		
@@ -178,6 +178,6 @@ NgramModel >> trainOnSentence: aCollectionOrString [
 ]
 
 { #category : #accessing }
-NgramModel >> vocabulary [
+AINgramModel >> vocabulary [
 	^ vocabulary
 ]

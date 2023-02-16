@@ -2,7 +2,7 @@ Extension { #name : #String }
 
 { #category : #'*AI-Ngram' }
 String >> asNgram [
-	^ Ngram withElements: { self }
+	^ AINgram withElements: { self }
 ]
 
 { #category : #'*AI-Ngram' }

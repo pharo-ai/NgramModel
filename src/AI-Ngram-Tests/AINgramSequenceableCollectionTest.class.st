@@ -1,29 +1,26 @@
 Class {
-	#name : #NgramStringTest,
+	#name : #AINgramSequenceableCollectionTest,
 	#superclass : #TestCase,
-	#instVars : [
-		'text'
-	],
 	#category : #'AI-Ngram-Tests'
 }
 
-{ #category : #running }
-NgramStringTest >> setUp [ 	
-	super setUp.
-	text := 'I do not like green eggs and ham'.
+{ #category : #accessing }
+AINgramSequenceableCollectionTest >> collection [
+
+	^ #( I do not like green eggs and ham )
 ]
 
 { #category : #tests }
-NgramStringTest >> testAsNgram [
-	| str expected actual |
-	str := 'hello'.
-	expected := #(hello) asNgram.
-	actual := str asNgram.
-	self assert: actual equals: expected.
+AINgramSequenceableCollectionTest >> testAsNgram [
+	| ngram |
+	ngram := self collection asNgram.
+	self assert: ngram order equals: 8.
+	self assert: ngram history equals: #(I do not like green eggs and) asNgram.
+	self assert: ngram last equals: 'ham'.
 ]
 
 { #category : #tests }
-NgramStringTest >> testBigrams [
+AINgramSequenceableCollectionTest >> testBigrams [
 	| expected actual |
 	
 	expected := {
@@ -35,12 +32,12 @@ NgramStringTest >> testBigrams [
 		#(eggs and) asNgram .
 		#(and ham) asNgram }.
 	
-	actual := text bigrams.
+	actual := self collection bigrams.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testBigramsPadWith [
+AINgramSequenceableCollectionTest >> testBigramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -54,12 +51,12 @@ NgramStringTest >> testBigramsPadWith [
 		#(and ham) asNgram .
 		#(ham '##') asNgram }.
 		
-	actual := text bigramsPadWith: '##'.
+	actual := self collection bigramsPadWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testBigramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testBigramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -73,12 +70,12 @@ NgramStringTest >> testBigramsWithDefaultPadding [
 		#(and ham) asNgram .
 		#(ham '<s>') asNgram }.
 		
-	actual := text bigramsWithDefaultPadding.
+	actual := self collection bigramsWithDefaultPadding.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testNgrams [
+AINgramSequenceableCollectionTest >> testNgrams [
 	| expected actual |
 	
 	expected := {
@@ -89,12 +86,12 @@ NgramStringTest >> testNgrams [
 		#(green eggs and) asNgram .
 		#(eggs and ham) asNgram }.
 	
-	actual := text ngrams: 3.
+	actual := self collection ngrams: 3.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testNgramsPadWith [
+AINgramSequenceableCollectionTest >> testNgramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -109,12 +106,12 @@ NgramStringTest >> testNgramsPadWith [
 		#(and ham '##') asNgram .
 		#(ham '##' '##') asNgram }.
 		
-	actual := text ngrams: 3 padWith: '##'.
+	actual := self collection ngrams: 3 padWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testNgramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testNgramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -129,12 +126,12 @@ NgramStringTest >> testNgramsWithDefaultPadding [
 		#(and ham '<s>') asNgram .
 		#(ham '<s>' '<s>') asNgram }.
 		
-	actual := text ngramsWithDefaultPadding: 3.
+	actual := self collection ngramsWithDefaultPadding: 3.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testPentagrams [
+AINgramSequenceableCollectionTest >> testPentagrams [
 	| expected actual |
 	
 	expected := {
@@ -143,12 +140,12 @@ NgramStringTest >> testPentagrams [
 		#(not like green eggs and) asNgram .
 		#(like green eggs and ham) asNgram }.
 	
-	actual := text pentagrams.
+	actual := self collection pentagrams.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testPentagramsPadWith [
+AINgramSequenceableCollectionTest >> testPentagramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -165,12 +162,12 @@ NgramStringTest >> testPentagramsPadWith [
 		#(and ham '##' '##' '##') asNgram .
 		#(ham '##' '##' '##' '##') asNgram }.
 		
-	actual := text pentagramsPadWith: '##'.
+	actual := self collection pentagramsPadWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testPentagramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testPentagramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -187,12 +184,12 @@ NgramStringTest >> testPentagramsWithDefaultPadding [
 		#(and ham '<s>' '<s>' '<s>') asNgram .
 		#(ham '<s>' '<s>' '<s>' '<s>') asNgram }.
 		
-	actual := text pentagramsWithDefaultPadding.
+	actual := self collection pentagramsWithDefaultPadding.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTetragrams [
+AINgramSequenceableCollectionTest >> testTetragrams [
 	| expected actual |
 	
 	expected := {
@@ -202,12 +199,12 @@ NgramStringTest >> testTetragrams [
 		#(like green eggs and) asNgram .
 		#(green eggs and ham) asNgram }.
 	
-	actual := text tetragrams.
+	actual := self collection tetragrams.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTetragramsPadWith [
+AINgramSequenceableCollectionTest >> testTetragramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -223,12 +220,12 @@ NgramStringTest >> testTetragramsPadWith [
 		#(and ham '##' '##') asNgram .
 		#(ham '##' '##' '##') asNgram }.
 		
-	actual := text tetragramsPadWith: '##'.
+	actual := self collection tetragramsPadWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTetragramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testTetragramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -244,12 +241,12 @@ NgramStringTest >> testTetragramsWithDefaultPadding [
 		#(and ham '<s>' '<s>') asNgram .
 		#(ham '<s>' '<s>' '<s>') asNgram }.
 		
-	actual := text tetragramsWithDefaultPadding.
+	actual := self collection tetragramsWithDefaultPadding.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTrigrams [
+AINgramSequenceableCollectionTest >> testTrigrams [
 	| expected actual |
 	
 	expected := {
@@ -260,12 +257,12 @@ NgramStringTest >> testTrigrams [
 		#(green eggs and) asNgram .
 		#(eggs and ham) asNgram }.
 	
-	actual := text trigrams.
+	actual := self collection trigrams.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTrigramsPadWith [
+AINgramSequenceableCollectionTest >> testTrigramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -280,12 +277,12 @@ NgramStringTest >> testTrigramsPadWith [
 		#(and ham '##') asNgram .
 		#(ham '##' '##') asNgram }.
 		
-	actual := text trigramsPadWith: '##'.
+	actual := self collection trigramsPadWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testTrigramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testTrigramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -300,12 +297,12 @@ NgramStringTest >> testTrigramsWithDefaultPadding [
 		#(and ham '<s>') asNgram .
 		#(ham '<s>' '<s>') asNgram }.
 		
-	actual := text trigramsWithDefaultPadding.
+	actual := self collection trigramsWithDefaultPadding.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testUnigrams [
+AINgramSequenceableCollectionTest >> testUnigrams [
 	| expected actual |
 	
 	expected := {
@@ -318,12 +315,12 @@ NgramStringTest >> testUnigrams [
 		#(and) asNgram .
 		#(ham) asNgram }.
 	
-	actual := text unigrams.
+	actual := self collection unigrams.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testUnigramsPadWith [
+AINgramSequenceableCollectionTest >> testUnigramsPadWith [
 	| expected actual |
 	
 	expected := {
@@ -336,12 +333,12 @@ NgramStringTest >> testUnigramsPadWith [
 		#(and) asNgram .
 		#(ham) asNgram }.
 	
-	actual := text unigramsPadWith: '##'.
+	actual := self collection unigramsPadWith: '##'.
 	self assert: actual equals: expected.
 ]
 
 { #category : #tests }
-NgramStringTest >> testUnigramsWithDefaultPadding [
+AINgramSequenceableCollectionTest >> testUnigramsWithDefaultPadding [
 	| expected actual |
 	
 	expected := {
@@ -354,6 +351,6 @@ NgramStringTest >> testUnigramsWithDefaultPadding [
 		#(and) asNgram .
 		#(ham) asNgram }.
 	
-	actual := text unigramsWithDefaultPadding.
+	actual := self collection unigramsWithDefaultPadding.
 	self assert: actual equals: expected.
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #NgramSmoothing,
+	#name : #AINgramSmoothing,
 	#superclass : #Object,
 	#instVars : [
 		'model'
@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #accessing }
-NgramSmoothing >> model [ 
+AINgramSmoothing >> model [ 
 	^ model
 ]
 
 { #category : #accessing }
-NgramSmoothing >> model: aModel [
+AINgramSmoothing >> model: aModel [
 	model := aModel
 ]
 
 { #category : #'as yet unclassified' }
-NgramSmoothing >> smoothedProbabilityOfNgram: ngram [
+AINgramSmoothing >> smoothedProbabilityOfNgram: ngram [
 	self subclassResponsibility 
 ]

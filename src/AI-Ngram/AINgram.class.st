@@ -1,5 +1,5 @@
 Class {
-	#name : #Ngram,
+	#name : #AINgram,
 	#superclass : #Object,
 	#instVars : [
 		'history',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-Ngram class >> withElements: aCollection [
+AINgram class >> withElements: aCollection [
 	"Creates n-gram from a collection of n elements"
 	aCollection isEmpty ifTrue: [ ^ self zerogram ].
 	^ self
@@ -18,7 +18,7 @@ Ngram class >> withElements: aCollection [
 ]
 
 { #category : #'instance creation' }
-Ngram class >> withHistory: aNgram last: anObject [
+AINgram class >> withHistory: aNgram last: anObject [
 	"Creates n-gram with aNgram as history and anObject as last element"
 	^ self new
 		history: aNgram;
@@ -27,13 +27,13 @@ Ngram class >> withHistory: aNgram last: anObject [
 ]
 
 { #category : #'instance creation' }
-Ngram class >> zerogram [
+AINgram class >> zerogram [
 	"Creates n-gram of order 0. It is an empty n-gram that has no elements"
 	^ self new.
 ]
 
 { #category : #comparing }
-Ngram >> = anObject [
+AINgram >> = anObject [
 	(anObject isKindOf: self class)
 		ifFalse: [ ^ false ].
 		
@@ -41,50 +41,50 @@ Ngram >> = anObject [
 ]
 
 { #category : #converting }
-Ngram >> asArray [ 
+AINgram >> asArray [ 
 	self isEmpty ifTrue: [ ^ #() ].
 	^ history asArray copyWith: last
 ]
 
 { #category : #comparing }
-Ngram >> hash [
+AINgram >> hash [
 	^ self asArray hash
 ]
 
 { #category : #accessing }
-Ngram >> history [
+AINgram >> history [
 	self isEmpty ifTrue: [ ^ self class zerogram ].
 	^ history
 ]
 
 { #category : #accessing }
-Ngram >> history: aNgram [ 
+AINgram >> history: aNgram [ 
 	history := aNgram
 ]
 
 { #category : #accessing }
-Ngram >> isEmpty [ 
+AINgram >> isEmpty [ 
 	^ self last isNil
 ]
 
 { #category : #accessing }
-Ngram >> last [
+AINgram >> last [
 	^ last
 ]
 
 { #category : #accessing }
-Ngram >> last: anObject [
+AINgram >> last: anObject [
 	last := anObject
 ]
 
 { #category : #accessing }
-Ngram >> order [ 
+AINgram >> order [ 
 	self isEmpty ifTrue: [ ^ 0 ].
 	^ history order + 1
 ]
 
 { #category : #converting }
-Ngram >> printOn: aStream [
+AINgram >> printOn: aStream [
 	aStream
 		nextPutAll: 'n-gram';
 		nextPut: $(;

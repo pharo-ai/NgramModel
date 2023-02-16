@@ -1,18 +1,18 @@
 Class {
-	#name : #EntropyTest,
+	#name : #AINgramEntropyTest,
 	#superclass : #TestCase,
 	#category : #'AI-NgramModelMetrics-Tests'
 }
 
 { #category : #tests }
-EntropyTest >> testEntropyOfBigramModel [
+AINgramEntropyTest >> testEntropyOfBigramModel [
 	| model text expected actual |
-	model := NgramModel order: 2.
+	model := AINgramModel order: 2.
 	text := 'Lorem ipsum ipsum ipsum dolor'.
 	model trainOnSentence: text.
 	
 	expected := -1/6 * ({ 1 . 1 . 2/3 . 2/3 . 1/3 . 1 } collect: [ :x | x log: 2 ]) sum.
-	actual := Entropy of: model on: { text }.
+	actual := AINgramEntropy of: model on: { text }.
 	
 	self assert: actual closeTo: expected.
 ]

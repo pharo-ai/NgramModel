@@ -1,16 +1,16 @@
 Class {
-	#name : #Entropy,
-	#superclass : #NgramModelMetric,
+	#name : #AINgramEntropy,
+	#superclass : #AINgramModelMetric,
 	#category : #'AI-NgramModelMetrics'
 }
 
 { #category : #accessing }
-Entropy >> logarithmBase [
+AINgramEntropy >> logarithmBase [
 	^ 2
 ]
 
 { #category : #'instance creation' }
-Entropy >> of: model on: aCollectionOfTexts [
+AINgramEntropy >> of: model on: aCollectionOfTexts [
 	| entropies |
 	entropies := aCollectionOfTexts collect: [ :aString |
 		self of: model onText: aString ].
@@ -18,13 +18,13 @@ Entropy >> of: model on: aCollectionOfTexts [
 ]
 
 { #category : #'instance creation' }
-Entropy >> of: model onNgrams: ngrams [
+AINgramEntropy >> of: model onNgrams: ngrams [
 	^ -1 * 1 / ngrams size asFloat * (ngrams collect: [ :ngram |
 		(model probabilityOfNgram: ngram) log: self logarithmBase ]) sum.
 ]
 
 { #category : #'instance creation' }
-Entropy >> of: model onText: aString [
+AINgramEntropy >> of: model onText: aString [
 	| ngrams |
 	ngrams := aString ngramsWithDefaultPadding: model order.
 	^ self of: model onNgrams: ngrams.
