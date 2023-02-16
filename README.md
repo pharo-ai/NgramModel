@@ -13,7 +13,7 @@ To install the packages of NgramModel, go to the Playground (Ctrl+OW) in your Ph
 
 ```Smalltalk
 Metacello new
-  baseline: 'NgramModel';
+  baseline: 'AINgramModel';
   repository: 'github://pharo-ai/NgramModel/src';
   load
 ```
