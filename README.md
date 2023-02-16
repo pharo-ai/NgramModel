@@ -72,7 +72,7 @@ This package provides only one class - `Ngram`. It models the n-gram.
 You can create n-gram from any `SequenceableCollection`:
 
 ```Smalltalk
-trigram := Ngram withElements: #(do not like).
+trigram := AINgram withElements: #(do not like).
 tetragram := #(green eggs and ham) asNgram.
 ```
 
@@ -82,13 +82,13 @@ Or by explicitly providing the history (n-gram of lower order) and last element:
 hist := #(green eggs and) asNgram.
 w := 'ham'.
 
-ngram := Ngram withHistory: hist last: w.
+ngram := AINgram withHistory: hist last: w.
 ```
 
 You can also create a zerogram - n-gram of order 0. It is an empty sequence with no history and no last word:
 
 ```Smalltalk
-Ngram zerogram.
+AINgram zerogram.
 ```
 
 ### Accessing
@@ -115,13 +115,13 @@ brown := file contents.
 ```
 #### 2. Training a 2-gram language model on the corpus
 ```Smalltalk
-model := NgramModel order: 2.
+model := AINgramModel order: 2.
 model trainOn: brown.
 ```
 #### 3. Generating text of 100 words
 At each step the model selects top 5 words that are most likely to follow the previous words and returns the random word from those five (this randomnes ensures that the generator does not get stuck in a cycle).
 ```Smalltalk
-generator := NgramTextGenerator new model: model.
+generator := AINgramTextGenerator new model: model.
 generator generateTextOfSize: 100.
 ```
 ## Result:
