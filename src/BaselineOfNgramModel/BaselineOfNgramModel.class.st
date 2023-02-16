@@ -10,11 +10,11 @@ BaselineOfNgramModel >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		spec
-			package: 'Ngram';
-			package: 'NgramModel' with: [ spec requires: #( 'Ngram' ) ];
-			package: 'NgramModelTextGenerator' with: [ spec requires: #( 'NgramModel' ) ];
-			package: 'Ngram-Tests' with: [ spec requires: #( 'Ngram' ) ];
-			package: 'NgramModel-Tests' with: [ spec requires: #( 'NgramModel' ) ].
+			package: 'AI-Ngram';
+			package: 'AI-NgramModel' with: [ spec requires: #( 'AI-Ngram' ) ];
+			package: 'AI-NgramModelTextGenerator' with: [ spec requires: #( 'AI-NgramModel' ) ];
+			package: 'AI-Ngram-Tests' with: [ spec requires: #( 'AI-Ngram' ) ];
+			package: 'AI-NgramModel-Tests' with: [ spec requires: #( 'AI-NgramModel' ) ].
 
 		spec group: 'Ngram-core' with: #( 'Ngram' 'Ngram-Tests' ) ]
 ]
