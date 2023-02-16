@@ -2,14 +2,13 @@
 SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
-      #baseline : 'NgramModel',
-      #directory : 'src',
-      #platforms : [ #pharo ]
+      #baseline : 'AINgramModel',
+      #directory : 'src'
     }
   ],
   #testing : {
     #coverage : {
-      #packages : [ 'NgramModel*' ]
+      #packages : [ 'AI-NgramModel*' ]
     }
   }
 }
