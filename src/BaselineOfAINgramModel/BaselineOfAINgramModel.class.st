@@ -1,16 +1,11 @@
 Class {
-	#name : #BaselineOfNgramModel,
+	#name : #BaselineOfAINgramModel,
 	#superclass : #BaselineOf,
-	#category : #BaselineOfNgramModel
+	#category : #BaselineOfAINgramModel
 }
 
-{ #category : #testing }
-BaselineOfNgramModel class >> isDeprecated [
-	^ true
-]
-
 { #category : #baselines }
-BaselineOfNgramModel >> baseline: spec [
+BaselineOfAINgramModel >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
